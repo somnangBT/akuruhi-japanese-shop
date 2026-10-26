@@ -23,6 +23,13 @@ import {
   getConnectedFolderName,
 } from '../utils/localFolderSync';
 import { optimizeImageForWeb } from '../utils/imageOptimizer';
+import {
+  isSupabaseConfigured,
+  fetchProductsFromSupabase,
+  saveProductToSupabase,
+  deleteProductFromSupabase,
+  uploadImageToSupabase,
+} from '../utils/supabase';
 
 interface StoreContextType {
   products: Product[];
@@ -234,6 +241,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setProducts(INITIAL_PRODUCTS);
     }
   }, [products]);
+
+  // Load live products from Supabase Cloud Database if configured
+  useEffect(() => {
+    if (isSupabaseConfigured()) {
+      fetchProductsFromSupabase().then((data) => {
+        if (data && data.length > 0) {
+          setProducts(data);
+        }
+      });
+    }
+  }, []);
 
   // Cart State
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -528,6 +546,18 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       console.warn('Server upload API unreachable, using client base64 fallback:', srvErr);
     }
 
+    // 2.5 Permanent Global Upload to Supabase Storage if configured
+    if (isSupabaseConfigured()) {
+      try {
+        const supabaseUrl = await uploadImageToSupabase(optimizedDataUrl, rawFilename);
+        if (supabaseUrl) {
+          finalUrl = supabaseUrl;
+        }
+      } catch (err) {
+        console.warn('Supabase image upload notice:', err);
+      }
+    }
+
     // 3. Save into administrator's computer dedicated folder (if folder handle connected, non-blocking)
     let syncResult = { success: true, savedToLocalFolder: false, filename: finalFilename };
     try {
@@ -612,18 +642,56 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     showToast(`Official Quotation PDF updated (${fileName}).`);
   };
 
-  // Product Actions (Full Admin Authority)
-  const addProduct = (newProdData: Omit<Product, 'id'>) => {
+  // Product Actions (Full Admin Authority & Supabase Cloud Sync)
+  const addProduct = async (newProdData: Omit<Product, 'id'>) => {
+    let finalImageUrl = newProdData.imageUrl;
+    // Upload image to Supabase Cloud Storage if configured for permanent global public CDN URL
+    if (finalImageUrl && finalImageUrl.startsWith('data:') && isSupabaseConfigured()) {
+      try {
+        const uploadedUrl = await uploadImageToSupabase(finalImageUrl, newProdData.name);
+        if (uploadedUrl) {
+          finalImageUrl = uploadedUrl;
+        }
+      } catch (err) {
+        console.warn('Image upload to Supabase notice:', err);
+      }
+    }
+
     const newProduct: Product = {
       ...newProdData,
+      imageUrl: finalImageUrl,
       id: `prod-${Date.now()}`,
     };
     setProducts((prev) => [newProduct, ...prev]);
+    if (isSupabaseConfigured()) {
+      saveProductToSupabase(newProduct);
+    }
     showToast(`Added product "${newProduct.name}" to catalog.`);
   };
 
-  const updateProduct = (id: string, updates: Partial<Product>) => {
-    setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, ...updates } : p)));
+  const updateProduct = async (id: string, updates: Partial<Product>) => {
+    let finalImageUrl = updates.imageUrl;
+    if (finalImageUrl && finalImageUrl.startsWith('data:') && isSupabaseConfigured()) {
+      try {
+        const uploadedUrl = await uploadImageToSupabase(finalImageUrl, updates.name || id);
+        if (uploadedUrl) {
+          finalImageUrl = uploadedUrl;
+        }
+      } catch (err) {
+        console.warn('Image update to Supabase notice:', err);
+      }
+    }
+
+    const fullUpdates = { ...updates, ...(finalImageUrl ? { imageUrl: finalImageUrl } : {}) };
+
+    setProducts((prev) => {
+      const updatedList = prev.map((p) => (p.id === id ? { ...p, ...fullUpdates } : p));
+      const target = updatedList.find((p) => p.id === id);
+      if (target && isSupabaseConfigured()) {
+        saveProductToSupabase(target);
+      }
+      return updatedList;
+    });
     showToast('Product updated successfully.');
   };
 
@@ -631,13 +699,21 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setProducts((prev) => prev.filter((p) => p.id !== id));
     setCart((prev) => prev.filter((item) => item.product.id !== id));
     setSelectedProduct((prev) => (prev?.id === id ? null : prev));
+    if (isSupabaseConfigured()) {
+      deleteProductFromSupabase(id);
+    }
     showToast('Product permanently deleted from inventory.');
   };
 
   const toggleStock = (id: string) => {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, inStock: !p.inStock } : p))
-    );
+    setProducts((prev) => {
+      const updatedList = prev.map((p) => (p.id === id ? { ...p, inStock: !p.inStock } : p));
+      const target = updatedList.find((p) => p.id === id);
+      if (target && isSupabaseConfigured()) {
+        saveProductToSupabase(target);
+      }
+      return updatedList;
+    });
   };
 
   const resetCatalog = () => {
