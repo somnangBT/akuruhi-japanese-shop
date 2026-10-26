@@ -4,9 +4,26 @@ export const HERO_BANNER_IMAGE = '/assets/images/hero_japanese_culinary_spread_1
 export const WAGYU_IMAGE = '/assets/images/wagyu_beef_a5_cut_1792817198476.jpg';
 export const SAKE_IMAGE = '/assets/images/sake_dassai_bottle_1792817199693.jpg';
 export const SASHIMI_IMAGE = '/assets/images/fresh_sashimi_seafood_1792817198781.jpg';
+export const SALMON_IMAGE = '/assets/images/salmon_sashimi.jpg';
 
 export const INITIAL_PRODUCTS: Product[] = [
   // --- FROZEN & PREMIUM MEATS & SEAFOOD ---
+  {
+    id: 'prod-new-01',
+    code: 'M9999',
+    name: 'Fresh Norwegian Salmon Sashimi',
+    nameJp: 'サーモン刺身',
+    nameKhmer: 'ត្រីសាម៉ុងស្រស់ សាស៊ីមី',
+    category: 'frozen',
+    price: 35,
+    unit: '500g/Pkt',
+    brand: 'Akuruhi Fresh',
+    description: 'Sashimi-grade fresh Norwegian salmon, rich in omega-3 with melt-in-mouth richness.',
+    imageUrl: SALMON_IMAGE,
+    inStock: true,
+    featured: true,
+    storageTemp: 'Chilled',
+  },
   {
     id: 'prod-w1',
     code: 'M3037',
