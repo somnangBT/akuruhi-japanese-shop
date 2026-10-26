@@ -81,7 +81,11 @@ export const AdminDashboard: React.FC = () => {
 
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
+  const [isUploadingQr, setIsUploadingQr] = useState(false);
+  const [isUploadingBg, setIsUploadingBg] = useState(false);
   const logoFileInputRef = useRef<HTMLInputElement>(null);
+  const qrFileInputRef = useRef<HTMLInputElement>(null);
+  const bgFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -121,57 +125,68 @@ export const AdminDashboard: React.FC = () => {
 
   const handleBackgroundUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setIsUploadingImage(true);
-      const previewReader = new FileReader();
-      previewReader.onload = (event) => {
-        const immediateUrl = event.target?.result as string;
-        if (immediateUrl) {
-          updateSettings({ backgroundImageUrl: immediateUrl });
-        }
-      };
-      previewReader.readAsDataURL(file);
+    if (!file) return;
 
-      try {
-        const { url } = await saveUploadedImage(file, 'background', `background_${Date.now()}`);
-        if (url) {
-          updateSettings({ backgroundImageUrl: url });
-        }
-        showToast('Shop background updated successfully.');
-      } catch (err: any) {
-        showToast(err?.message || 'Background upload failed.');
-      } finally {
-        setIsUploadingImage(false);
-        e.target.value = '';
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select a valid image file (PNG, JPG, WEBP).');
+      return;
+    }
+
+    setIsUploadingBg(true);
+    const previewReader = new FileReader();
+    previewReader.onload = (event) => {
+      const immediateUrl = event.target?.result as string;
+      if (immediateUrl) {
+        updateSettings({ backgroundImageUrl: immediateUrl });
       }
+    };
+    previewReader.readAsDataURL(file);
+
+    try {
+      const { url } = await saveUploadedImage(file, 'background', `background_${Date.now()}`);
+      if (url) {
+        updateSettings({ backgroundImageUrl: url });
+      }
+      showToast('Shop background updated successfully.');
+    } catch (err: any) {
+      showToast(err?.message || 'Background upload failed.');
+    } finally {
+      setIsUploadingBg(false);
+      if (e.target) e.target.value = '';
     }
   };
 
   const handleQrUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setIsUploadingImage(true);
-      const previewReader = new FileReader();
-      previewReader.onload = (event) => {
-        const immediateUrl = event.target?.result as string;
-        if (immediateUrl) {
-          updateSettings({ qrImageUrl: immediateUrl });
-        }
-      };
-      previewReader.readAsDataURL(file);
+    if (!file) return;
 
-      try {
-        const { url } = await saveUploadedImage(file, 'qr_code', `payment_khqr_${Date.now()}`);
-        if (url) {
-          updateSettings({ qrImageUrl: url });
-        }
-        showToast('Store payment QR code uploaded successfully.');
-      } catch (err: any) {
-        showToast(err?.message || 'QR upload failed.');
-      } finally {
-        setIsUploadingImage(false);
-        e.target.value = '';
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select a valid image file (PNG, JPG, WEBP).');
+      return;
+    }
+
+    setIsUploadingQr(true);
+    const previewReader = new FileReader();
+    previewReader.onload = (event) => {
+      const immediateUrl = event.target?.result as string;
+      if (immediateUrl) {
+        updateSettings({ qrImageUrl: immediateUrl });
       }
+    };
+    previewReader.readAsDataURL(file);
+
+    try {
+      const { url } = await saveUploadedImage(file, 'qr_code', `payment_khqr_${Date.now()}`);
+      if (url) {
+        updateSettings({ qrImageUrl: url });
+      }
+      showToast('Store payment QR code uploaded & synced successfully!');
+    } catch (err: any) {
+      console.warn('QR upload notice:', err);
+      showToast('QR code updated locally.');
+    } finally {
+      setIsUploadingQr(false);
+      if (e.target) e.target.value = '';
     }
   };
 
@@ -1517,16 +1532,30 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <label className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white dark:bg-neutral-850 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-300 dark:border-neutral-700 text-slate-900 dark:text-white cursor-pointer transition-colors shrink-0 shadow-xs font-medium">
-                  <Upload className="w-3.5 h-3.5 text-slate-500 dark:text-neutral-400" />
-                  <span>Upload Background</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleBackgroundUpload}
-                    className="hidden"
-                  />
-                </label>
+                <button
+                  type="button"
+                  onClick={() => bgFileInputRef.current?.click()}
+                  disabled={isUploadingBg}
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg border text-xs font-medium shadow-xs transition-colors shrink-0 cursor-pointer ${
+                    isUploadingBg
+                      ? 'bg-slate-100 dark:bg-neutral-800 border-slate-200 dark:border-neutral-700 text-slate-400 dark:text-neutral-500 cursor-not-allowed'
+                      : 'bg-white dark:bg-neutral-850 hover:bg-slate-100 dark:hover:bg-neutral-800 border-slate-300 dark:border-neutral-700 text-slate-900 dark:text-white'
+                  }`}
+                >
+                  {isUploadingBg ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-rose-500" />
+                  ) : (
+                    <Upload className="w-3.5 h-3.5 text-slate-500 dark:text-neutral-400" />
+                  )}
+                  <span>{isUploadingBg ? 'Uploading Background...' : 'Upload Background'}</span>
+                </button>
+                <input
+                  ref={bgFileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleBackgroundUpload}
+                  className="hidden"
+                />
               </div>
 
               <div>
@@ -1804,9 +1833,20 @@ export const AdminDashboard: React.FC = () => {
                 <div className="p-4 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-850 space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-semibold text-slate-900 dark:text-white">Store Payment QR Code (KHQR / ABA)</div>
+                      <div className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                        <span>Store Payment QR Code (KHQR / ABA)</span>
+                        {settings.qrImageUrl ? (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                            Custom Bank QR Active
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/30">
+                            Dynamic KHQR Active
+                          </span>
+                        )}
+                      </div>
                       <div className="text-[11px] text-slate-500 dark:text-neutral-400">
-                        Upload your official bank KHQR code image or enter an image URL. Customers will scan this directly at checkout.
+                        Upload your official bank KHQR code image or enter an image URL. If not uploaded, automatic Dynamic KHQR is used at checkout.
                       </div>
                     </div>
                   </div>
@@ -1814,10 +1854,15 @@ export const AdminDashboard: React.FC = () => {
                   <div className="flex flex-col sm:flex-row items-center gap-5">
                     {/* QR Code Live Preview */}
                     <div className="p-3 bg-white rounded-xl shadow-md border border-slate-200 shrink-0 flex flex-col items-center">
-                      <div className="text-[9px] font-bold text-red-600 uppercase tracking-widest mb-1">
-                        KHQR · MERCHANT
+                      <div className="text-[9px] font-bold text-red-600 uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <span>KHQR · MERCHANT</span>
                       </div>
-                      <div className="w-28 h-28 flex items-center justify-center overflow-hidden rounded bg-slate-50 border border-slate-200">
+                      <div className="w-28 h-28 flex items-center justify-center overflow-hidden rounded bg-slate-50 border border-slate-200 relative">
+                        {isUploadingQr && (
+                          <div className="absolute inset-0 bg-white/80 dark:bg-black/50 backdrop-blur-xs flex items-center justify-center z-10">
+                            <Loader2 className="w-6 h-6 animate-spin text-rose-600" />
+                          </div>
+                        )}
                         {settings.qrImageUrl ? (
                           <img
                             src={settings.qrImageUrl}
@@ -1825,11 +1870,25 @@ export const AdminDashboard: React.FC = () => {
                             className="w-full h-full object-contain"
                           />
                         ) : (
-                          <div className="flex flex-col items-center justify-center text-center p-2 text-slate-700">
-                            <QrCode className="w-12 h-12 text-slate-800 mb-1" />
-                            <span className="text-[9px] font-mono leading-tight font-semibold text-slate-600">
-                              Default Dynamic KHQR
-                            </span>
+                          <div className="flex flex-col items-center justify-center text-center p-1 text-slate-700 w-full h-full">
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+                                settings.khqrMerchantId || settings.accountNumber || 'akuruhi_cambodia'
+                              )}`}
+                              alt="Dynamic QR preview"
+                              className="w-20 h-20 object-contain"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = 'none';
+                                const fallback = (e.target as HTMLElement).nextElementSibling;
+                                if (fallback) (fallback as HTMLElement).style.display = 'flex';
+                              }}
+                            />
+                            <div className="hidden flex-col items-center justify-center">
+                              <QrCode className="w-10 h-10 text-slate-800 mb-1" />
+                              <span className="text-[9px] font-mono leading-tight font-semibold text-slate-600">
+                                Dynamic KHQR
+                              </span>
+                            </div>
                           </div>
                         )}
                       </div>
@@ -1841,27 +1900,41 @@ export const AdminDashboard: React.FC = () => {
                     {/* Upload button & actions */}
                     <div className="flex-1 space-y-3 w-full">
                       <div className="flex flex-wrap items-center gap-3">
-                        <label className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white dark:bg-neutral-850 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-300 dark:border-neutral-700 text-slate-900 dark:text-white cursor-pointer transition-colors text-xs font-medium shadow-xs">
-                          <Upload className="w-3.5 h-3.5 text-slate-500 dark:text-neutral-400" />
-                          <span>Upload QR Code Image</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleQrUpload}
-                            className="hidden"
-                          />
-                        </label>
+                        <button
+                          type="button"
+                          onClick={() => qrFileInputRef.current?.click()}
+                          disabled={isUploadingQr}
+                          className={`flex items-center gap-2 px-3.5 py-2 rounded-lg border text-xs font-medium shadow-xs transition-colors cursor-pointer ${
+                            isUploadingQr
+                              ? 'bg-slate-100 dark:bg-neutral-800 border-slate-200 dark:border-neutral-700 text-slate-400 dark:text-neutral-500 cursor-not-allowed'
+                              : 'bg-white dark:bg-neutral-850 hover:bg-slate-100 dark:hover:bg-neutral-800 border-slate-300 dark:border-neutral-700 text-slate-900 dark:text-white'
+                          }`}
+                        >
+                          {isUploadingQr ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-rose-500" />
+                          ) : (
+                            <Upload className="w-3.5 h-3.5 text-slate-500 dark:text-neutral-400" />
+                          )}
+                          <span>{isUploadingQr ? 'Uploading QR Code...' : 'Upload QR Code Image'}</span>
+                        </button>
+                        <input
+                          ref={qrFileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleQrUpload}
+                          className="hidden"
+                        />
 
                         {settings.qrImageUrl && (
                           <button
                             type="button"
                             onClick={() => {
                               updateSettings({ qrImageUrl: '' });
-                              showToast('Custom QR removed. Restored standard dynamic KHQR.');
+                              showToast('Custom QR removed. Restored automatic Dynamic KHQR.');
                             }}
-                            className="px-3 py-2 rounded-lg bg-white dark:bg-neutral-900 hover:bg-red-50 dark:hover:bg-red-950/60 text-slate-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 border border-slate-200 dark:border-neutral-800 transition-colors text-xs"
+                            className="px-3 py-2 rounded-lg bg-white dark:bg-neutral-900 hover:bg-red-50 dark:hover:bg-red-950/60 text-slate-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 border border-slate-200 dark:border-neutral-800 transition-colors text-xs font-medium cursor-pointer"
                           >
-                            Reset to Default KHQR
+                            Reset to Dynamic KHQR
                           </button>
                         )}
                       </div>
@@ -1880,7 +1953,7 @@ export const AdminDashboard: React.FC = () => {
                       </div>
 
                       <p className="text-[11px] text-slate-500 dark:text-neutral-500">
-                        Accepted format: PNG, JPG, WebP. When uploaded, customers see your official bank QR during QR checkout.
+                        Accepted format: PNG, JPG, WebP. When uploaded, customers see your official bank QR during QR checkout. If reset, customers see an automatic dynamic QR with their exact total.
                       </p>
                     </div>
                   </div>

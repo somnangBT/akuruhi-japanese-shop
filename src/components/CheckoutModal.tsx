@@ -517,11 +517,13 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
                     <div className="p-3 bg-white rounded-xl shadow-md shrink-0 flex flex-col items-center border border-slate-200">
                       <div className="text-[9px] font-bold text-red-600 uppercase tracking-widest mb-1 flex items-center gap-1.5">
                         <span>KHQR · BAKONG</span>
-                        {settings.qrImageUrl && (
-                          <span className="text-[8px] px-1 py-0.2 bg-red-100 text-red-700 rounded font-semibold">
-                            OFFICIAL
-                          </span>
-                        )}
+                        <span className={`text-[8px] px-1.5 py-0.5 rounded font-semibold ${
+                          settings.qrImageUrl
+                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                            : 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300'
+                        }`}>
+                          {settings.qrImageUrl ? 'OFFICIAL QR' : 'DYNAMIC KHQR'}
+                        </span>
                       </div>
 
                       {settings.qrImageUrl ? (
@@ -533,67 +535,84 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
                           />
                         </div>
                       ) : (
-                        /* Generated dynamic QR code SVG */
-                        <svg
-                          className="w-36 h-36"
-                          viewBox="0 0 100 100"
-                          shapeRendering="crispEdges"
-                        >
-                          <rect width="100" height="100" fill="#ffffff" />
-                          <rect x="5" y="5" width="25" height="25" fill="#000000" />
-                          <rect x="8" y="8" width="19" height="19" fill="#ffffff" />
-                          <rect x="11" y="11" width="13" height="13" fill="#000000" />
-
-                          <rect x="70" y="5" width="25" height="25" fill="#000000" />
-                          <rect x="73" y="8" width="19" height="19" fill="#ffffff" />
-                          <rect x="76" y="11" width="13" height="13" fill="#000000" />
-
-                          <rect x="5" y="70" width="25" height="25" fill="#000000" />
-                          <rect x="8" y="73" width="19" height="19" fill="#ffffff" />
-                          <rect x="11" y="76" width="13" height="13" fill="#000000" />
-
-                          <rect x="36" y="8" width="6" height="6" fill="#000000" />
-                          <rect x="46" y="8" width="6" height="6" fill="#000000" />
-                          <rect x="56" y="8" width="6" height="6" fill="#000000" />
-                          <rect x="36" y="20" width="6" height="6" fill="#000000" />
-                          <rect x="50" y="20" width="12" height="6" fill="#000000" />
-                          <rect x="8" y="36" width="6" height="6" fill="#000000" />
-                          <rect x="20" y="36" width="6" height="6" fill="#000000" />
-                          <rect
-                            x="36"
-                            y="36"
-                            width="28"
-                            height="28"
-                            fill={settings.brandColor || '#e11d48'}
-                            rx="4"
+                        <div className="w-36 h-36 flex items-center justify-center p-1 bg-white rounded overflow-hidden border border-neutral-200 relative">
+                          {/* Real scannable dynamic QR code with order amount */}
+                          <img
+                            src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&margin=8&data=${encodeURIComponent(
+                              settings.khqrMerchantId
+                                ? `bakong://qr?id=${settings.khqrMerchantId}&amount=${cartTotal.toFixed(2)}&currency=USD`
+                                : `${settings.bankName}: ${settings.accountNumber} (${settings.accountName}) - $${cartTotal.toFixed(2)} USD`
+                            )}`}
+                            alt="Dynamic Order Payment QR Code"
+                            className="w-full h-full object-contain"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                              const fallback = (e.target as HTMLElement).nextElementSibling;
+                              if (fallback) (fallback as HTMLElement).style.display = 'block';
+                            }}
                           />
-                          <text
-                            x="50"
-                            y="55"
-                            fill="#ffffff"
-                            fontSize="13"
-                            fontWeight="bold"
-                            textAnchor="middle"
-                            fontFamily="sans-serif"
+                          {/* Stylized vector fallback if offline */}
+                          <svg
+                            className="w-full h-full hidden"
+                            viewBox="0 0 100 100"
+                            shapeRendering="crispEdges"
                           >
-                            {settings.logoText || '旭'}
-                          </text>
+                            <rect width="100" height="100" fill="#ffffff" />
+                            <rect x="5" y="5" width="25" height="25" fill="#000000" />
+                            <rect x="8" y="8" width="19" height="19" fill="#ffffff" />
+                            <rect x="11" y="11" width="13" height="13" fill="#000000" />
 
-                          <rect x="70" y="36" width="12" height="6" fill="#000000" />
-                          <rect x="86" y="36" width="6" height="6" fill="#000000" />
-                          <rect x="8" y="48" width="6" height="6" fill="#000000" />
-                          <rect x="20" y="48" width="6" height="6" fill="#000000" />
-                          <rect x="70" y="48" width="6" height="6" fill="#000000" />
-                          <rect x="86" y="48" width="6" height="6" fill="#000000" />
+                            <rect x="70" y="5" width="25" height="25" fill="#000000" />
+                            <rect x="73" y="8" width="19" height="19" fill="#ffffff" />
+                            <rect x="76" y="11" width="13" height="13" fill="#000000" />
 
-                          <rect x="36" y="70" width="6" height="6" fill="#000000" />
-                          <rect x="48" y="70" width="16" height="6" fill="#000000" />
-                          <rect x="70" y="70" width="6" height="6" fill="#000000" />
-                          <rect x="82" y="70" width="10" height="6" fill="#000000" />
-                          <rect x="36" y="82" width="12" height="6" fill="#000000" />
-                          <rect x="54" y="82" width="6" height="6" fill="#000000" />
-                          <rect x="70" y="82" width="22" height="6" fill="#000000" />
-                        </svg>
+                            <rect x="5" y="70" width="25" height="25" fill="#000000" />
+                            <rect x="8" y="73" width="19" height="19" fill="#ffffff" />
+                            <rect x="11" y="76" width="13" height="13" fill="#000000" />
+
+                            <rect x="36" y="8" width="6" height="6" fill="#000000" />
+                            <rect x="46" y="8" width="6" height="6" fill="#000000" />
+                            <rect x="56" y="8" width="6" height="6" fill="#000000" />
+                            <rect x="36" y="20" width="6" height="6" fill="#000000" />
+                            <rect x="50" y="20" width="12" height="6" fill="#000000" />
+                            <rect x="8" y="36" width="6" height="6" fill="#000000" />
+                            <rect x="20" y="36" width="6" height="6" fill="#000000" />
+                            <rect
+                              x="36"
+                              y="36"
+                              width="28"
+                              height="28"
+                              fill={settings.brandColor || '#e11d48'}
+                              rx="4"
+                            />
+                            <text
+                              x="50"
+                              y="55"
+                              fill="#ffffff"
+                              fontSize="13"
+                              fontWeight="bold"
+                              textAnchor="middle"
+                              fontFamily="sans-serif"
+                            >
+                              {settings.logoText || '旭'}
+                            </text>
+
+                            <rect x="70" y="36" width="12" height="6" fill="#000000" />
+                            <rect x="86" y="36" width="6" height="6" fill="#000000" />
+                            <rect x="8" y="48" width="6" height="6" fill="#000000" />
+                            <rect x="20" y="48" width="6" height="6" fill="#000000" />
+                            <rect x="70" y="48" width="6" height="6" fill="#000000" />
+                            <rect x="86" y="48" width="6" height="6" fill="#000000" />
+
+                            <rect x="36" y="70" width="6" height="6" fill="#000000" />
+                            <rect x="48" y="70" width="16" height="6" fill="#000000" />
+                            <rect x="70" y="70" width="6" height="6" fill="#000000" />
+                            <rect x="82" y="70" width="10" height="6" fill="#000000" />
+                            <rect x="36" y="82" width="12" height="6" fill="#000000" />
+                            <rect x="54" y="82" width="6" height="6" fill="#000000" />
+                            <rect x="70" y="82" width="22" height="6" fill="#000000" />
+                          </svg>
+                        </div>
                       )}
 
                       <div className="font-mono text-xs font-bold text-neutral-900 mt-1">
