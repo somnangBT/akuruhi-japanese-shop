@@ -38,7 +38,7 @@ export const Header: React.FC = () => {
   const isCustomer = currentUser?.role === 'customer';
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 dark:bg-[#0d0f14]/95 backdrop-blur-md border-b border-slate-200/90 dark:border-neutral-800/80 shadow-xs transition-colors duration-200">
+    <header className="w-full bg-white/95 dark:bg-[#0d0f14]/95 backdrop-blur-md border-b border-slate-200/90 dark:border-neutral-800/80 shadow-xs transition-colors duration-200">
       {/* Top Quiet Announcement Bar */}
       <div className="bg-slate-100 dark:bg-neutral-950/90 text-slate-600 dark:text-neutral-400 text-xs py-1.5 px-4 border-b border-slate-200/80 dark:border-neutral-850 flex items-center justify-between transition-colors">
         <div className="mx-auto flex items-center gap-2 truncate max-w-4xl text-center">

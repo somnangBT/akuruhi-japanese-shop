@@ -636,7 +636,7 @@ export const ProductCatalog: React.FC = () => {
       {/* Main Grid Layout: Sidebar on Left + Products Grid on Right */}
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* DESKTOP SIDEBAR - Sticky beneath fixed top header */}
-        <aside className="hidden lg:block w-72 xl:w-80 shrink-0 sticky top-[112px] p-5 rounded-2xl bg-white dark:bg-[#11141b] border border-slate-200 dark:border-neutral-800 shadow-sm dark:shadow-xl space-y-6">
+        <aside className="hidden lg:block w-72 xl:w-80 shrink-0 sticky top-[116px] p-5 rounded-2xl bg-white dark:bg-[#11141b] border border-slate-200 dark:border-neutral-800 shadow-sm dark:shadow-xl space-y-6">
           {FilterSidebarContent}
         </aside>
 

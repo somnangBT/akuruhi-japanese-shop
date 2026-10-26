@@ -92,13 +92,13 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
-      {/* Top Bar Navigation - Fixed / Sticky Header for User & Admin */}
-      <div className="sticky top-0 z-50 w-full">
+      {/* Top Bar Navigation - Fixed Position (Never scrolls away) */}
+      <div className="fixed top-0 left-0 right-0 z-50 w-full shadow-sm">
         <Header />
       </div>
 
-      {/* Main View Router */}
-      <main className="relative z-10 flex-1">
+      {/* Main View Router - Padded top so content sits perfectly below fixed menu bar */}
+      <main className="relative z-10 flex-1 pt-[101px]">
         {activeView === 'admin' && (
           currentUser?.role === 'admin' ? (
             <AdminDashboard />
