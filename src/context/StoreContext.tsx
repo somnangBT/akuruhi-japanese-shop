@@ -32,6 +32,10 @@ import {
   fetchUsersFromSupabase,
   saveUserToSupabase,
   deleteUserFromSupabase,
+  fetchSettingsFromSupabase,
+  saveSettingsToSupabase,
+  saveSettingsToSupabaseDebounced,
+  subscribeToSettings,
 } from '../utils/supabase';
 
 interface StoreContextType {
@@ -245,7 +249,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [products]);
 
-  // Load live products from Supabase Cloud Database if configured
+  // Load live products, users, and store settings from Supabase Cloud Database if configured
   useEffect(() => {
     if (isSupabaseConfigured()) {
       fetchProductsFromSupabase().then((data) => {
@@ -258,6 +262,22 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           setRegisteredUsers(data);
         }
       });
+      fetchSettingsFromSupabase().then((remoteSettings) => {
+        if (remoteSettings) {
+          setSettings((prev) => ({ ...prev, ...remoteSettings }));
+        }
+      });
+
+      // Subscribe to real-time changes so brand color & logo changes show instantly across all screens
+      const unsubscribeSettings = subscribeToSettings((remoteSettings) => {
+        if (remoteSettings) {
+          setSettings((prev) => ({ ...prev, ...remoteSettings }));
+        }
+      });
+
+      return () => {
+        unsubscribeSettings();
+      };
     }
   }, []);
 
@@ -482,7 +502,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const folderName = await selectDedicatedLocalFolder();
     if (folderName) {
       setConnectedLocalFolder(folderName);
-      setSettings((prev) => ({ ...prev, dedicatedImageFolder: folderName }));
+      setSettings((prev) => {
+        const next = { ...prev, dedicatedImageFolder: folderName };
+        if (isSupabaseConfigured()) {
+          saveSettingsToSupabaseDebounced(next);
+        }
+        return next;
+      });
       showToast(`Connected dedicated computer folder: "${folderName}". Uploads will sync here.`);
       return folderName;
     }
@@ -617,36 +643,54 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  // Settings & Authority
+  // Settings & Authority (Syncs to Supabase Cloud Database)
   const updateSettings = (updates: Partial<StoreSettings>) => {
-    setSettings((prev) => ({ ...prev, ...updates }));
+    setSettings((prev) => {
+      const updated = { ...prev, ...updates };
+      if (isSupabaseConfigured()) {
+        saveSettingsToSupabaseDebounced(updated);
+      }
+      return updated;
+    });
     showToast('Store settings updated.');
   };
 
   const updateAboutMe = (updates: Partial<AboutMeData>) => {
-    setSettings((prev) => ({
-      ...prev,
-      aboutMe: {
-        ...prev.aboutMe,
-        ...updates,
-        lastUpdated: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
-        updatedBy: currentUser?.name || 'Administrator',
-      },
-    }));
+    setSettings((prev) => {
+      const updated: StoreSettings = {
+        ...prev,
+        aboutMe: {
+          ...prev.aboutMe,
+          ...updates,
+          lastUpdated: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+          updatedBy: currentUser?.name || 'Administrator',
+        },
+      };
+      if (isSupabaseConfigured()) {
+        saveSettingsToSupabase(updated);
+      }
+      return updated;
+    });
     showToast('About Me section updated successfully.');
   };
 
   const updateQuotationPdf = (fileUrl: string, fileName: string) => {
-    setSettings((prev) => ({
-      ...prev,
-      quotationPdfUrl: fileUrl,
-      quotationFileName: fileName,
-      quotationLastUpdated: new Date().toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }),
-    }));
+    setSettings((prev) => {
+      const updated: StoreSettings = {
+        ...prev,
+        quotationPdfUrl: fileUrl,
+        quotationFileName: fileName,
+        quotationLastUpdated: new Date().toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        }),
+      };
+      if (isSupabaseConfigured()) {
+        saveSettingsToSupabase(updated);
+      }
+      return updated;
+    });
     showToast(`Official Quotation PDF updated (${fileName}).`);
   };
 

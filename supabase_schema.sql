@@ -114,3 +114,34 @@ DROP POLICY IF EXISTS "Allow public delete to users" ON public.users;
 CREATE POLICY "Allow public delete to users"
 ON public.users FOR DELETE
 USING (true);
+
+-- ========================================================
+-- 7. STORE SETTINGS & BRAND CUSTOMIZATION TABLE
+-- ========================================================
+CREATE TABLE IF NOT EXISTS public.store_settings (
+    id TEXT PRIMARY KEY DEFAULT 'primary',
+    settings JSONB NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.store_settings ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read access to store_settings" ON public.store_settings;
+CREATE POLICY "Allow public read access to store_settings"
+ON public.store_settings FOR SELECT
+USING (true);
+
+DROP POLICY IF EXISTS "Allow public insert to store_settings" ON public.store_settings;
+CREATE POLICY "Allow public insert to store_settings"
+ON public.store_settings FOR INSERT
+WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow public update to store_settings" ON public.store_settings;
+CREATE POLICY "Allow public update to store_settings"
+ON public.store_settings FOR UPDATE
+USING (true);
+
+DROP POLICY IF EXISTS "Allow public delete to store_settings" ON public.store_settings;
+CREATE POLICY "Allow public delete to store_settings"
+ON public.store_settings FOR DELETE
+USING (true);

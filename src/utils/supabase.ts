@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Product, User } from '../types';
-import { INITIAL_PRODUCTS } from '../data/initialProducts';
+import { Product, User, StoreSettings } from '../types';
+import { INITIAL_PRODUCTS, DEFAULT_STORE_SETTINGS } from '../data/initialProducts';
 import { INITIAL_REGISTERED_USERS } from '../data/initialUsers';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -313,5 +313,130 @@ export const deleteUserFromSupabase = async (id: string): Promise<boolean> => {
   } catch (err) {
     console.error('deleteUserFromSupabase exception:', err);
     return false;
+  }
+};
+
+/**
+ * Fetch store settings (brand colors, logo, shop background, contact info) from Supabase
+ */
+export const fetchSettingsFromSupabase = async (): Promise<StoreSettings | null> => {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase
+      .from('store_settings')
+      .select('settings')
+      .eq('id', 'primary')
+      .maybeSingle();
+
+    if (error) {
+      console.warn('Supabase fetchSettings error:', error.message);
+      return null;
+    }
+
+    if (data && data.settings) {
+      return {
+        ...DEFAULT_STORE_SETTINGS,
+        ...(data.settings as Partial<StoreSettings>),
+      };
+    }
+
+    // Auto-seed initial store settings if empty
+    console.log('Supabase store_settings is empty. Auto-seeding initial store settings...');
+    const { error: seedErr } = await supabase.from('store_settings').upsert({
+      id: 'primary',
+      settings: DEFAULT_STORE_SETTINGS,
+      updated_at: new Date().toISOString(),
+    });
+    if (!seedErr) {
+      return DEFAULT_STORE_SETTINGS;
+    } else {
+      console.warn('Auto-seed settings error:', seedErr.message);
+    }
+
+    return null;
+  } catch (err) {
+    console.warn('Failed to fetch settings from Supabase:', err);
+    return null;
+  }
+};
+
+/**
+ * Save / Upsert store settings to Supabase
+ */
+export const saveSettingsToSupabase = async (settings: StoreSettings): Promise<boolean> => {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase.from('store_settings').upsert(
+      {
+        id: 'primary',
+        settings,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'id' }
+    );
+
+    if (error) {
+      console.error('Supabase saveSettings error:', error.message);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('saveSettingsToSupabase exception:', err);
+    return false;
+  }
+};
+
+let settingsSaveTimer: any = null;
+
+/**
+ * Debounced save to Supabase to prevent excessive API writes while typing or dragging sliders
+ */
+export const saveSettingsToSupabaseDebounced = (
+  settings: StoreSettings,
+  delayMs: number = 500
+): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if (settingsSaveTimer) {
+      clearTimeout(settingsSaveTimer);
+    }
+    settingsSaveTimer = setTimeout(async () => {
+      const res = await saveSettingsToSupabase(settings);
+      resolve(res);
+    }, delayMs);
+  });
+};
+
+/**
+ * Subscribe to realtime store settings changes (e.g. brand color, logo, notice changes)
+ */
+export const subscribeToSettings = (onUpdate: (settings: StoreSettings) => void) => {
+  if (!supabase) return () => {};
+  try {
+    const channel = supabase
+      .channel('store_settings_realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'store_settings', filter: 'id=eq.primary' },
+        (payload: any) => {
+          if (payload?.new?.settings) {
+            onUpdate({
+              ...DEFAULT_STORE_SETTINGS,
+              ...(payload.new.settings as Partial<StoreSettings>),
+            });
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      try {
+        supabase?.removeChannel(channel);
+      } catch {
+        // ignore
+      }
+    };
+  } catch (err) {
+    console.warn('Realtime settings subscription error:', err);
+    return () => {};
   }
 };
