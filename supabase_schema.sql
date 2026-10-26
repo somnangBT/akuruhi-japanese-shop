@@ -96,24 +96,16 @@ CREATE TABLE IF NOT EXISTS public.users (
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Allow public read access to users" ON public.users;
-CREATE POLICY "Allow public read access to users"
-ON public.users FOR SELECT
-USING (true);
-
 DROP POLICY IF EXISTS "Allow public insert to users" ON public.users;
-CREATE POLICY "Allow public insert to users"
-ON public.users FOR INSERT
-WITH CHECK (true);
-
 DROP POLICY IF EXISTS "Allow public update to users" ON public.users;
-CREATE POLICY "Allow public update to users"
-ON public.users FOR UPDATE
-USING (true);
-
 DROP POLICY IF EXISTS "Allow public delete to users" ON public.users;
-CREATE POLICY "Allow public delete to users"
-ON public.users FOR DELETE
-USING (true);
+DROP POLICY IF EXISTS "Allow all access to users" ON public.users;
+
+CREATE POLICY "Allow all access to users"
+ON public.users
+FOR ALL
+USING (true)
+WITH CHECK (true);
 
 -- ========================================================
 -- 7. STORE SETTINGS & BRAND CUSTOMIZATION TABLE

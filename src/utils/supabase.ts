@@ -282,19 +282,66 @@ export const fetchUsersFromSupabase = async (): Promise<User[] | null> => {
 /**
  * Save / Upsert a single registered user into Supabase
  */
-export const saveUserToSupabase = async (user: User): Promise<boolean> => {
-  if (!supabase) return false;
+export const saveUserToSupabase = async (user: User): Promise<{ success: boolean; error?: string }> => {
+  if (!supabase) {
+    console.warn('saveUserToSupabase: Supabase is not configured. Check NEXT_PUBLIC_SUPABASE_URL.');
+    return { success: false, error: 'Supabase is not configured' };
+  }
   try {
     const row = mapUserToRow(user);
-    const { error } = await supabase.from('users').upsert(row, { onConflict: 'id' });
-    if (error) {
-      console.error('Supabase saveUser error:', error.message);
-      return false;
+    console.log('Syncing user to Supabase:', row.login_identifier);
+    // 1. Try upsert
+    const { error: upsertErr } = await supabase.from('users').upsert(row, { onConflict: 'id' });
+    if (!upsertErr) {
+      console.log('User synced to Supabase successfully via upsert:', user.name);
+      return { success: true };
     }
-    return true;
-  } catch (err) {
+
+    console.warn('Supabase upsert notice, trying direct insert:', upsertErr.message);
+    // 2. Fallback to direct insert
+    const { error: insertErr } = await supabase.from('users').insert(row);
+    if (!insertErr) {
+      console.log('User synced to Supabase successfully via insert:', user.name);
+      return { success: true };
+    }
+
+    console.error('Supabase saveUser failed:', insertErr.message);
+    return { success: false, error: insertErr.message };
+  } catch (err: any) {
     console.error('saveUserToSupabase exception:', err);
-    return false;
+    return { success: false, error: err?.message || 'Network exception' };
+  }
+};
+
+/**
+ * Subscribe to realtime registered customer events
+ */
+export const subscribeToUsers = (onUserAdded: (user: User) => void) => {
+  if (!supabase) return () => {};
+  try {
+    const channel = supabase
+      .channel('users_realtime')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'users' },
+        (payload: any) => {
+          if (payload?.new) {
+            onUserAdded(mapRowToUser(payload.new));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      try {
+        supabase?.removeChannel(channel);
+      } catch {
+        // ignore
+      }
+    };
+  } catch (err) {
+    console.warn('Realtime users subscription notice:', err);
+    return () => {};
   }
 };
 

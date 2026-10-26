@@ -36,6 +36,7 @@ import {
   saveSettingsToSupabase,
   saveSettingsToSupabaseDebounced,
   subscribeToSettings,
+  subscribeToUsers,
 } from '../utils/supabase';
 
 interface StoreContextType {
@@ -275,8 +276,21 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
       });
 
+      // Subscribe to real-time new registered users
+      const unsubscribeUsers = subscribeToUsers((newUser) => {
+        if (newUser) {
+          setRegisteredUsers((prev) => {
+            if (prev.some((u) => u.id === newUser.id || u.loginIdentifier === newUser.loginIdentifier)) {
+              return prev;
+            }
+            return [newUser, ...prev];
+          });
+        }
+      });
+
       return () => {
         unsubscribeSettings();
+        unsubscribeUsers();
       };
     }
   }, []);
