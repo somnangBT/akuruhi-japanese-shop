@@ -1,0 +1,8 @@
+{
+  "name": "Akuruhi Japanese Shop",
+  "description": "Premier online Japanese food and beverage supply store with customer authentication, seamless QR code and Telegram checkout, and a real-time admin management dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
