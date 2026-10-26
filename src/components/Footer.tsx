@@ -114,17 +114,17 @@ export const Footer: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand & Address */}
           <div className="md:col-span-2 space-y-3">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               {settings.logoUrl ? (
                 <img
                   src={settings.logoUrl}
                   alt={`${settings.storeName} Logo`}
-                  className="w-8 h-8 rounded-lg object-contain bg-white dark:bg-white/10 border border-slate-200 dark:border-neutral-700/60 p-0.5 shadow-xs"
+                  className="w-10 h-10 sm:w-11 sm:h-11 object-contain shrink-0"
                 />
               ) : (
                 <div
                   style={{ backgroundColor: settings.brandColor || '#e11d48' }}
-                  className="w-7 h-7 rounded-md flex items-center justify-center text-white font-bold text-sm shadow-xs"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-xs shrink-0"
                 >
                   {settings.logoText || '旭'}
                 </div>

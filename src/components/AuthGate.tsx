@@ -145,12 +145,12 @@ export const AuthGate: React.FC = () => {
               <img
                 src={settings.logoUrl}
                 alt={`${settings.storeName} Logo`}
-                className="w-12 h-12 rounded-xl object-contain bg-slate-50 dark:bg-white/10 border border-slate-200 dark:border-neutral-700/60 p-1 shadow-xs"
+                className="w-16 h-16 sm:w-20 sm:h-20 object-contain shrink-0"
               />
             ) : (
               <div
                 style={{ backgroundColor: settings.brandColor || '#e11d48' }}
-                className="w-12 h-12 rounded-xl flex items-center justify-center font-display font-extrabold text-white text-xl shadow-lg shadow-rose-950/40"
+                className="w-14 h-14 rounded-2xl flex items-center justify-center font-display font-extrabold text-white text-2xl shadow-lg shadow-rose-950/40 shrink-0"
               >
                 {settings.logoText || '旭'}
               </div>

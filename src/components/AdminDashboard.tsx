@@ -1161,7 +1161,7 @@ export const AdminDashboard: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-center gap-5">
                 {/* Live Logo Preview Box */}
                 <div className="flex flex-col items-center gap-2 shrink-0">
-                  <div className="w-20 h-20 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-750 flex items-center justify-center p-2 shadow-inner overflow-hidden">
+                  <div className="w-24 h-24 flex items-center justify-center p-1 overflow-hidden">
                     {settings.logoUrl ? (
                       <img
                         src={settings.logoUrl}
@@ -1169,7 +1169,7 @@ export const AdminDashboard: React.FC = () => {
                         className="w-full h-full object-contain"
                       />
                     ) : (
-                      <div className="w-12 h-12 rounded-lg bg-rose-600 flex items-center justify-center font-display font-bold text-white text-xl shadow-md">
+                      <div className="w-14 h-14 rounded-xl bg-rose-600 flex items-center justify-center font-display font-bold text-white text-2xl shadow-md">
                         {settings.logoText || '旭'}
                       </div>
                     )}

@@ -67,18 +67,18 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-2 sm:gap-4 shrink-0 min-w-0">
           <button
             onClick={() => setActiveView('store')}
-            className="flex items-center gap-2 sm:gap-2.5 text-left group min-w-0"
+            className="flex items-center gap-2.5 sm:gap-3 text-left group min-w-0 cursor-pointer"
           >
             {settings.logoUrl ? (
               <img
                 src={settings.logoUrl}
                 alt={`${settings.storeName} Logo`}
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg object-contain bg-neutral-100 dark:bg-white/10 border border-slate-200 dark:border-neutral-700/60 p-0.5 shadow-xs shrink-0"
+                className="h-10 w-10 sm:h-12 sm:w-12 object-contain shrink-0 transition-transform group-hover:scale-105"
               />
             ) : (
               <div
                 style={{ backgroundColor: settings.brandColor || '#e11d48' }}
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-md flex items-center justify-center font-display font-extrabold text-white text-sm sm:text-base shadow-sm shadow-rose-950/20 shrink-0"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center font-display font-extrabold text-white text-sm sm:text-base shadow-sm shadow-rose-950/20 shrink-0"
               >
                 {settings.logoText || '旭'}
               </div>
