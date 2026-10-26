@@ -796,19 +796,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       return { success: false, error: 'Please enter a valid Gmail address or phone number.' };
     }
 
-    // Check if looks like email
-    const isEmail = rawIdentifier.includes('@');
-    if (isEmail && !rawIdentifier.toLowerCase().endsWith('@gmail.com')) {
-      return {
-        success: false,
-        error: 'Email registration requires a valid Gmail address (@gmail.com).',
-      };
-    }
+    // Check if looks like valid email or phone
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawIdentifier);
+    const phoneDigits = rawIdentifier.replace(/[^0-9]/g, '');
 
-    if (!isEmail && rawIdentifier.replace(/[^0-9]/g, '').length < 8) {
+    if (!isEmail && phoneDigits.length < 8) {
       return {
         success: false,
-        error: 'Please enter a valid phone number (at least 8 digits).',
+        error: 'Please enter a valid email address or active phone number (at least 8 digits).',
       };
     }
 

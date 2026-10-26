@@ -14,6 +14,9 @@ import {
   Sparkles,
   Sun,
   Moon,
+  Eye,
+  EyeOff,
+  Loader2,
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
@@ -31,14 +34,18 @@ export const AuthGate: React.FC = () => {
   // Customer Form State
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [telegram, setTelegram] = useState('');
 
   // Admin Form State (strictly password masked)
-  const [adminGmail, setAdminGmail] = useState('limbunterm213@gmail.com');
+  const [adminGmail, setAdminGmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
 
   // Error State
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -58,6 +65,18 @@ export const AuthGate: React.FC = () => {
   const handleCustomerRegister = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+
+    // Standard Validation: Confirm Password match
+    if (password !== confirmPassword) {
+      setErrorMessage('Passwords do not match. Please verify your password. / លេខសម្ងាត់ទាំងពីរមិនត្រូវគ្នាទេ។');
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long. / លេខសម្ងាត់ត្រូវមានយ៉ាងហោចណាស់ ៦ តួអក្សរ។');
+      return;
+    }
+
     setIsSubmitting(true);
     const result = registerCustomer({
       name,
@@ -234,39 +253,49 @@ export const AuthGate: React.FC = () => {
           {authMode === 'login' && (
             <form onSubmit={handleCustomerLogin} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-slate-700 dark:text-neutral-300 mb-1 font-medium">
-                  Registered Gmail or Phone Number <span className="text-rose-500">*</span>
+                <label className="block text-slate-800 dark:text-neutral-200 mb-1 font-semibold">
+                  Email ឬ លេខទូរស័ព្ទ / Email or Phone <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
-                  <Mail className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
+                  <Mail className="w-3.5 h-3.5 absolute left-3 top-3.5 text-slate-400 dark:text-neutral-500" />
                   <input
                     type="text"
                     required
-                    placeholder="e.g. sophia.sokha@gmail.com or 0971234567"
+                    autoComplete="username"
+                    placeholder="e.g. sophia.sokha@gmail.com or 012888999"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
                     className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm shadow-xs"
                   />
                 </div>
-                <span className="text-[10px] text-slate-500 dark:text-neutral-500 mt-1 block">
-                  Enter your registered Gmail address or Cambodian phone number.
+                <span className="text-[10px] text-slate-500 dark:text-neutral-400 mt-1 block">
+                  បញ្ចូល Email ឬលេខទូរស័ព្ទដែលបានចុះឈ្មោះ / Enter your registered email or phone number.
                 </span>
               </div>
 
               <div>
-                <label className="block text-slate-700 dark:text-neutral-300 mb-1 font-medium">
-                  Password <span className="text-rose-500">*</span>
+                <label className="block text-slate-800 dark:text-neutral-200 mb-1 font-semibold">
+                  លេខសម្ងាត់ / Password <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
-                  <Lock className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
+                  <Lock className="w-3.5 h-3.5 absolute left-3 top-3.5 text-slate-400 dark:text-neutral-500" />
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     required
+                    autoComplete="current-password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-neutral-200 cursor-pointer"
+                    title={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
 
@@ -274,14 +303,23 @@ export const AuthGate: React.FC = () => {
                 type="submit"
                 disabled={isSubmitting}
                 style={{ backgroundColor: settings.brandColor || '#e11d48' }}
-                className="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 shadow-md shadow-rose-950/20 mt-3 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 shadow-md shadow-rose-950/20 mt-3 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
               >
-                <span>Sign In to Customer Account</span>
-                <ArrowRight className="w-4 h-4" />
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>កំពុងផ្ទៀងផ្ទាត់... / Signing In...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>ចូលគណនី / Sign In</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
 
-              <div className="pt-2 text-center text-[11px] text-slate-500 dark:text-neutral-400">
-                New customer?{' '}
+              <div className="pt-2 text-center text-[11px] text-slate-600 dark:text-neutral-400">
+                មិនទាន់មានគណនី? (New customer?){' '}
                 <button
                   type="button"
                   onClick={() => {
@@ -290,7 +328,7 @@ export const AuthGate: React.FC = () => {
                   }}
                   className="text-rose-600 dark:text-rose-400 hover:underline font-semibold cursor-pointer"
                 >
-                  Create an Account
+                  ចុះឈ្មោះគណនីថ្មី / Register
                 </button>
               </div>
             </form>
@@ -300,14 +338,15 @@ export const AuthGate: React.FC = () => {
           {authMode === 'register' && (
             <form onSubmit={handleCustomerRegister} className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-700 dark:text-neutral-300 mb-1 font-medium">
-                  Full Name <span className="text-rose-500">*</span>
+                <label className="block text-slate-800 dark:text-neutral-200 mb-1 font-semibold">
+                  ឈ្មោះពេញ / Full Name <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
                   <User className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
                   <input
                     type="text"
                     required
+                    autoComplete="name"
                     placeholder="e.g. Liam Sovann"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -317,51 +356,91 @@ export const AuthGate: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-700 dark:text-neutral-300 mb-1 font-medium">
-                  Gmail Address or Phone Number <span className="text-rose-500">*</span>
+                <label className="block text-slate-800 dark:text-neutral-200 mb-1 font-semibold">
+                  Email ឬ លេខទូរស័ព្ទ / Email or Phone Number <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
                   <Mail className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
                   <input
                     type="text"
                     required
+                    autoComplete="email tel"
                     placeholder="yourname@gmail.com or 012888999"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
                     className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm shadow-xs"
                   />
                 </div>
-                <span className="text-[10px] text-slate-500 dark:text-neutral-500 mt-0.5 block">
-                  Must end in @gmail.com or enter your active mobile phone number.
+                <span className="text-[10px] text-slate-500 dark:text-neutral-400 mt-0.5 block">
+                  ប្រើសម្រាប់ Login ចូលប្រព័ន្ធ / Used as your primary login identifier.
                 </span>
               </div>
 
+              {/* Password */}
               <div>
-                <label className="block text-slate-700 dark:text-neutral-300 mb-1 font-medium">
-                  Password <span className="text-rose-500">*</span>
+                <label className="block text-slate-800 dark:text-neutral-200 mb-1 font-semibold">
+                  លេខសម្ងាត់ / Password <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
                   <Lock className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     required
-                    minLength={5}
-                    placeholder="At least 5 characters"
+                    minLength={6}
+                    autoComplete="new-password"
+                    placeholder="យ៉ាងហោច ៦ តួអក្សរ (Min 6 chars)"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-10 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-neutral-200 cursor-pointer"
+                    title={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Confirm Password (Standard Safety Verification) */}
+              <div>
+                <label className="block text-slate-800 dark:text-neutral-200 mb-1 font-semibold">
+                  បញ្ជាក់លេខសម្ងាត់ / Confirm Password <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative">
+                  <Lock className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    autoComplete="new-password"
+                    placeholder="វាយលេខសម្ងាត់ម្តងទៀត"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full pl-9 pr-10 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-neutral-200 cursor-pointer"
+                    title={showConfirmPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-700 dark:text-neutral-300 mb-1 font-medium">
-                  Delivery Address <span className="text-slate-400 dark:text-neutral-500 text-[10px] font-normal">(Optional)</span>
+                <label className="block text-slate-800 dark:text-neutral-200 mb-1 font-medium">
+                  អាសយដ្ឋានដឹកជញ្ជូន / Delivery Address <span className="text-slate-400 dark:text-neutral-500 text-[10px] font-normal">(ស្រេចចិត្ត / Optional)</span>
                 </label>
                 <div className="relative">
                   <MapPin className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
                   <input
                     type="text"
+                    autoComplete="street-address"
                     placeholder="e.g. Street 51, BKK1, Phnom Penh"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
@@ -371,8 +450,8 @@ export const AuthGate: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-700 dark:text-neutral-300 mb-1 font-medium">
-                  Telegram Username <span className="text-slate-400 dark:text-neutral-500 text-[10px] font-normal">(Optional)</span>
+                <label className="block text-slate-800 dark:text-neutral-200 mb-1 font-medium">
+                  Telegram Username <span className="text-slate-400 dark:text-neutral-500 text-[10px] font-normal">(ស្រេចចិត្ត / Optional)</span>
                 </label>
                 <div className="relative">
                   <Send className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
@@ -390,14 +469,23 @@ export const AuthGate: React.FC = () => {
                 type="submit"
                 disabled={isSubmitting}
                 style={{ backgroundColor: settings.brandColor || '#e11d48' }}
-                className="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 shadow-md shadow-rose-950/20 mt-3 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 shadow-md shadow-rose-950/20 mt-3 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
               >
-                <span>Register & Enter Store</span>
-                <ArrowRight className="w-4 h-4" />
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>កំពុងចុះឈ្មោះ... / Registering...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>ចុះឈ្មោះចូលទិញទំនិញ / Register & Enter Store</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
 
-              <div className="pt-2 text-center text-[11px] text-slate-500 dark:text-neutral-400">
-                Already registered?{' '}
+              <div className="pt-2 text-center text-[11px] text-slate-600 dark:text-neutral-400">
+                មានគណនីរួចហើយ? (Already registered?){' '}
                 <button
                   type="button"
                   onClick={() => {
@@ -406,7 +494,7 @@ export const AuthGate: React.FC = () => {
                   }}
                   className="text-rose-600 dark:text-rose-400 hover:underline font-semibold cursor-pointer"
                 >
-                  Sign In
+                  ចូលគណនី / Sign In
                 </button>
               </div>
             </form>
@@ -415,55 +503,71 @@ export const AuthGate: React.FC = () => {
           {/* TAB 3: ADMINISTRATOR PORTAL */}
           {authMode === 'admin' && (
             <form onSubmit={handleAdminLogin} className="space-y-3.5 text-xs">
-              <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-amber-800 dark:text-amber-300 text-[11px] leading-relaxed">
-                <span className="font-bold block text-amber-900 dark:text-amber-200">RESTRICTED ADMINISTRATOR ACCESS</span>
-                Access will be denied if the Gmail address and password do not match authorized management credentials.
+              <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/30 text-amber-900 dark:text-amber-200 text-[11px] leading-relaxed">
+                <span className="font-bold block text-amber-900 dark:text-amber-100">🔐 RESTRICTED ADMINISTRATOR ACCESS</span>
+                ផ្ទាំងនេះសម្រាប់តែគណនីអ្នកគ្រប់គ្រងហាងដែលមានការអនុញ្ញាតប៉ុណ្ណោះ។
               </div>
 
               <div>
-                <label className="block text-slate-700 dark:text-neutral-300 mb-1 font-medium">
+                <label className="block text-slate-800 dark:text-neutral-200 mb-1 font-semibold">
                   Administrator Gmail Address <span className="text-amber-600 dark:text-amber-400">*</span>
                 </label>
                 <div className="relative">
-                  <Mail className="w-3.5 h-3.5 absolute left-3 top-3 text-amber-500" />
+                  <Mail className="w-3.5 h-3.5 absolute left-3 top-3.5 text-amber-500" />
                   <input
                     type="email"
                     required
-                    placeholder="limbunterm213@gmail.com"
+                    autoComplete="username"
+                    placeholder="admin@gmail.com"
                     value={adminGmail}
                     onChange={(e) => setAdminGmail(e.target.value)}
                     className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-sm font-mono shadow-xs"
                   />
                 </div>
-                <span className="text-[10px] text-slate-500 dark:text-neutral-500 mt-1 block">
-                  Must be an authorized Gmail address ending in @gmail.com.
-                </span>
               </div>
 
               <div>
-                <label className="block text-slate-700 dark:text-neutral-300 mb-1 font-medium">
+                <label className="block text-slate-800 dark:text-neutral-200 mb-1 font-semibold">
                   Administrator Password <span className="text-amber-600 dark:text-amber-400">*</span>
                 </label>
                 <div className="relative">
-                  <Lock className="w-3.5 h-3.5 absolute left-3 top-3 text-amber-500" />
+                  <Lock className="w-3.5 h-3.5 absolute left-3 top-3.5 text-amber-500" />
                   <input
-                    type="password"
+                    type={showAdminPassword ? 'text' : 'password'}
                     required
+                    autoComplete="current-password"
                     placeholder="••••••••"
                     value={adminPassword}
                     onChange={(e) => setAdminPassword(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-sm font-mono shadow-xs"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowAdminPassword(!showAdminPassword)}
+                    className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-neutral-200 cursor-pointer"
+                    title={showAdminPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showAdminPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold text-sm transition-colors shadow-md shadow-amber-950/20 mt-2 flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold text-sm transition-colors shadow-md shadow-amber-950/20 mt-2 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
               >
-                <ShieldCheck className="w-4 h-4" />
-                <span>Verify & Enter Administrator Console</span>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-neutral-950" />
+                    <span>កំពុងផ្ទៀងផ្ទាត់សិទ្ធិ...</span>
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>ផ្ទៀងផ្ទាត់ & ចូល Admin Console</span>
+                  </>
+                )}
               </button>
             </form>
           )}
