@@ -37,6 +37,7 @@ import {
   Sun,
   Moon,
   Monitor,
+  Loader2,
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { Product, ProductCategory, Order, OrderStatus, Review } from '../types';
@@ -79,21 +80,42 @@ export const AdminDashboard: React.FC = () => {
   } = useStore();
 
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
+  const logoFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setIsUploadingImage(true);
-      try {
-        const { url } = await saveUploadedImage(file, 'logo', `logo_${Date.now()}`);
-        updateSettings({ logoUrl: url });
-        showToast('Store logo uploaded and updated successfully.');
-      } catch (err: any) {
-        showToast(err?.message || 'Logo upload failed. Please try a different image.');
-      } finally {
-        setIsUploadingImage(false);
-        e.target.value = '';
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select a valid image file (PNG, JPG, SVG, WEBP).');
+      return;
+    }
+
+    setIsUploadingLogo(true);
+
+    // Immediate preview: render in UI immediately without waiting for server/storage
+    const previewReader = new FileReader();
+    previewReader.onload = (event) => {
+      const immediateUrl = event.target?.result as string;
+      if (immediateUrl) {
+        updateSettings({ logoUrl: immediateUrl });
       }
+    };
+    previewReader.readAsDataURL(file);
+
+    try {
+      const { url } = await saveUploadedImage(file, 'logo', `logo_${Date.now()}`);
+      if (url) {
+        updateSettings({ logoUrl: url });
+      }
+      showToast('Store logo updated successfully!');
+    } catch (err: any) {
+      console.warn('Logo upload notice:', err);
+      showToast('Logo updated locally.');
+    } finally {
+      setIsUploadingLogo(false);
+      if (e.target) e.target.value = '';
     }
   };
 
@@ -101,9 +123,20 @@ export const AdminDashboard: React.FC = () => {
     const file = e.target.files?.[0];
     if (file) {
       setIsUploadingImage(true);
+      const previewReader = new FileReader();
+      previewReader.onload = (event) => {
+        const immediateUrl = event.target?.result as string;
+        if (immediateUrl) {
+          updateSettings({ backgroundImageUrl: immediateUrl });
+        }
+      };
+      previewReader.readAsDataURL(file);
+
       try {
         const { url } = await saveUploadedImage(file, 'background', `background_${Date.now()}`);
-        updateSettings({ backgroundImageUrl: url });
+        if (url) {
+          updateSettings({ backgroundImageUrl: url });
+        }
         showToast('Shop background updated successfully.');
       } catch (err: any) {
         showToast(err?.message || 'Background upload failed.');
@@ -118,9 +151,20 @@ export const AdminDashboard: React.FC = () => {
     const file = e.target.files?.[0];
     if (file) {
       setIsUploadingImage(true);
+      const previewReader = new FileReader();
+      previewReader.onload = (event) => {
+        const immediateUrl = event.target?.result as string;
+        if (immediateUrl) {
+          updateSettings({ qrImageUrl: immediateUrl });
+        }
+      };
+      previewReader.readAsDataURL(file);
+
       try {
         const { url } = await saveUploadedImage(file, 'qr_code', `payment_khqr_${Date.now()}`);
-        updateSettings({ qrImageUrl: url });
+        if (url) {
+          updateSettings({ qrImageUrl: url });
+        }
         showToast('Store payment QR code uploaded successfully.');
       } catch (err: any) {
         showToast(err?.message || 'QR upload failed.');
@@ -1123,16 +1167,26 @@ export const AdminDashboard: React.FC = () => {
                 {/* Upload & Controls */}
                 <div className="flex-1 space-y-3 w-full text-xs">
                   <div className="flex flex-wrap items-center gap-3">
-                    <label className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white dark:bg-neutral-850 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-300 dark:border-neutral-700 text-slate-900 dark:text-white cursor-pointer transition-colors shadow-xs font-medium">
-                      <Upload className="w-3.5 h-3.5 text-slate-500 dark:text-neutral-400" />
-                      <span>Upload Logo Image</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleLogoUpload}
-                        className="hidden"
-                      />
-                    </label>
+                    <button
+                      type="button"
+                      disabled={isUploadingLogo}
+                      onClick={() => logoFileInputRef.current?.click()}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-neutral-850 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-300 dark:border-neutral-700 text-slate-900 dark:text-white cursor-pointer transition-colors shadow-xs font-semibold disabled:opacity-60"
+                    >
+                      {isUploadingLogo ? (
+                        <Loader2 className="w-4 h-4 animate-spin text-rose-600" />
+                      ) : (
+                        <Upload className="w-4 h-4 text-slate-500 dark:text-neutral-400" />
+                      )}
+                      <span>{isUploadingLogo ? 'Processing Logo...' : 'Upload Logo Image'}</span>
+                    </button>
+                    <input
+                      ref={logoFileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif"
+                      onChange={handleLogoUpload}
+                      className="hidden"
+                    />
 
                     {settings.logoUrl && (
                       <button
@@ -1141,7 +1195,7 @@ export const AdminDashboard: React.FC = () => {
                           updateSettings({ logoUrl: '' });
                           showToast('Logo cleared. Using text monogram.');
                         }}
-                        className="px-3 py-2 rounded-lg bg-white dark:bg-neutral-900 hover:bg-red-50 dark:hover:bg-red-950/60 text-slate-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 border border-slate-200 dark:border-neutral-800 transition-colors"
+                        className="px-3 py-2 rounded-lg bg-white dark:bg-neutral-900 hover:bg-red-50 dark:hover:bg-red-950/60 text-slate-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 border border-slate-200 dark:border-neutral-800 transition-colors cursor-pointer font-medium"
                       >
                         Reset to Monogram
                       </button>

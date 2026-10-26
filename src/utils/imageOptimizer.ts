@@ -119,9 +119,18 @@ export const optimizeImageForWeb = async (
         // Draw image onto canvas
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Export as JPEG for high efficiency (or WebP if supported)
-        const outputMime = 'image/jpeg';
-        let outputDataUrl = canvas.toDataURL(outputMime, quality);
+        // Detect if source is PNG, WebP or SVG to preserve transparency (vital for logos & badges)
+        const isTransparentFormat =
+          (fileOrDataUrl instanceof File &&
+            (fileOrDataUrl.type.includes('png') ||
+              fileOrDataUrl.type.includes('webp') ||
+              fileOrDataUrl.type.includes('svg'))) ||
+          sourceDataUrl.startsWith('data:image/png') ||
+          sourceDataUrl.startsWith('data:image/webp') ||
+          sourceDataUrl.startsWith('data:image/svg');
+
+        const outputMime = isTransparentFormat ? 'image/png' : 'image/jpeg';
+        let outputDataUrl = canvas.toDataURL(outputMime, isTransparentFormat ? undefined : quality);
 
         // If compressed version is somehow larger or failed, fallback to original
         if (!outputDataUrl || outputDataUrl === 'data:,' || (sourceDataUrl.length < outputDataUrl.length && sourceDataUrl.length < 500 * 1024)) {
