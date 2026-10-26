@@ -463,8 +463,8 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-neutral-800 pb-px mb-6 overflow-x-auto scrollbar-none">
+      {/* Navigation Tabs - Fixed / Sticky right beneath top header */}
+      <div className="sticky top-[96px] z-30 bg-slate-50/95 dark:bg-[#0b0d10]/95 backdrop-blur-md py-2.5 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 border-b border-slate-200 dark:border-neutral-800 flex items-center gap-2 overflow-x-auto scrollbar-none shadow-xs transition-all mb-6">
         <button
           onClick={() => setActiveTab('products')}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${

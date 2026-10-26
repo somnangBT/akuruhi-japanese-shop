@@ -92,8 +92,8 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
-      {/* Top Bar Navigation */}
-      <div className="relative z-40">
+      {/* Top Bar Navigation - Fixed / Sticky Header for User & Admin */}
+      <div className="sticky top-0 z-50 w-full">
         <Header />
       </div>
 
