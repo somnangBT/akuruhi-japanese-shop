@@ -1,6 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Product } from '../types';
+import { Product, User } from '../types';
 import { INITIAL_PRODUCTS } from '../data/initialProducts';
+import { INITIAL_REGISTERED_USERS } from '../data/initialUsers';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -200,5 +201,117 @@ export const uploadImageToSupabase = async (
   } catch (err) {
     console.warn('uploadImageToSupabase exception:', err);
     return null;
+  }
+};
+
+// ==========================================
+// USER ACCOUNTS & REGISTRATION DATABASE SYNC
+// ==========================================
+
+export const mapRowToUser = (row: any): User => ({
+  id: row.id,
+  name: row.name || '',
+  email: row.email || undefined,
+  phone: row.phone || undefined,
+  loginIdentifier: row.login_identifier || row.email || row.phone || row.id,
+  password: row.password || '',
+  role: (row.role === 'admin' ? 'admin' : 'customer') as 'customer' | 'admin',
+  address: row.address || '',
+  telegram: row.telegram || undefined,
+  registeredAt: row.registered_at || row.created_at || new Date().toISOString(),
+  totalOrders: Number(row.total_orders) || 0,
+  totalSpent: Number(row.total_spent) || 0,
+  isActive: row.is_active !== undefined ? Boolean(row.is_active) : true,
+});
+
+export const mapUserToRow = (user: User) => ({
+  id: user.id,
+  name: user.name,
+  email: user.email || null,
+  phone: user.phone || null,
+  login_identifier: user.loginIdentifier,
+  password: user.password || '',
+  role: user.role,
+  address: user.address || '',
+  telegram: user.telegram || null,
+  registered_at: user.registeredAt || new Date().toISOString(),
+  total_orders: user.totalOrders || 0,
+  total_spent: user.totalSpent || 0,
+  is_active: user.isActive !== undefined ? user.isActive : true,
+});
+
+/**
+ * Fetch all registered users from Supabase
+ */
+export const fetchUsersFromSupabase = async (): Promise<User[] | null> => {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('Supabase fetchUsers error:', error.message);
+      return null;
+    }
+
+    if (data && data.length > 0) {
+      return data.map(mapRowToUser);
+    }
+
+    // Auto-seed initial users if empty
+    if (data && data.length === 0) {
+      console.log('Supabase users table is empty. Auto-seeding initial users...');
+      const rows = INITIAL_REGISTERED_USERS.map(mapUserToRow);
+      const { error: seedErr } = await supabase.from('users').insert(rows);
+      if (!seedErr) {
+        return INITIAL_REGISTERED_USERS;
+      } else {
+        console.warn('Auto-seed users error:', seedErr.message);
+      }
+    }
+
+    return null;
+  } catch (err) {
+    console.warn('Failed to fetch users from Supabase:', err);
+    return null;
+  }
+};
+
+/**
+ * Save / Upsert a single registered user into Supabase
+ */
+export const saveUserToSupabase = async (user: User): Promise<boolean> => {
+  if (!supabase) return false;
+  try {
+    const row = mapUserToRow(user);
+    const { error } = await supabase.from('users').upsert(row, { onConflict: 'id' });
+    if (error) {
+      console.error('Supabase saveUser error:', error.message);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('saveUserToSupabase exception:', err);
+    return false;
+  }
+};
+
+/**
+ * Delete a user from Supabase
+ */
+export const deleteUserFromSupabase = async (id: string): Promise<boolean> => {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase.from('users').delete().eq('id', id);
+    if (error) {
+      console.error('Supabase deleteUser error:', error.message);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('deleteUserFromSupabase exception:', err);
+    return false;
   }
 };

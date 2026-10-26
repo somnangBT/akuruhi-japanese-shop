@@ -25,7 +25,7 @@ import { Footer } from './components/Footer';
 import { ShieldAlert } from 'lucide-react';
 
 const AppContent: React.FC = () => {
-  const { activeView, setActiveView, toast, settings, currentUser, setIsAuthModalOpen } = useStore();
+  const { activeView, setActiveView, toast, settings, currentUser, setIsAuthModalOpen, theme } = useStore();
 
   const isFullStoreBg = settings.backgroundScope === 'entire_store' && settings.backgroundImageUrl;
 
@@ -71,15 +71,22 @@ const AppContent: React.FC = () => {
           <img
             src={settings.backgroundImageUrl}
             alt="Shop background"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-center transition-all duration-300"
             style={{
-              filter: `brightness(${1 - (settings.backgroundDarkness ?? 0.75) * 0.75}) blur(${settings.backgroundBlur || 0}px)`,
+              filter:
+                theme === 'dark'
+                  ? `brightness(${1 - (settings.backgroundDarkness ?? 0.75) * 0.75}) blur(${settings.backgroundBlur || 0}px)`
+                  : `brightness(${0.98 + (1 - (settings.backgroundDarkness ?? 0.75)) * 0.15}) blur(${settings.backgroundBlur || 0}px) contrast(1.05)`,
+              opacity: theme === 'dark' ? 1 : 0.45,
             }}
           />
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 transition-colors duration-300"
             style={{
-              backgroundColor: `rgba(11, 13, 16, ${settings.backgroundDarkness ?? 0.75})`,
+              backgroundColor:
+                theme === 'dark'
+                  ? `rgba(11, 13, 16, ${settings.backgroundDarkness ?? 0.75})`
+                  : `rgba(248, 250, 252, ${Math.min(0.96, Math.max(0.60, settings.backgroundDarkness ?? 0.75))})`,
             }}
           />
         </div>

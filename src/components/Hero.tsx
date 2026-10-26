@@ -5,7 +5,7 @@ import { useStore } from '../context/StoreContext';
 import { HERO_BANNER_IMAGE } from '../data/initialProducts';
 
 export const Hero: React.FC = () => {
-  const { setIsQuotationModalOpen, settings } = useStore();
+  const { setIsQuotationModalOpen, settings, theme } = useStore();
 
   const scrollToCatalog = () => {
     const el = document.getElementById('catalog-section');
@@ -24,14 +24,20 @@ export const Hero: React.FC = () => {
             alt="Japanese Culinary and Beverage Supply spread"
             referrerPolicy="no-referrer"
             style={{
-              filter: `brightness(${1 - (settings.backgroundDarkness ?? 0.75) * 0.7}) blur(${settings.backgroundBlur || 0}px)`,
+              filter:
+                theme === 'dark'
+                  ? `brightness(${1 - (settings.backgroundDarkness ?? 0.75) * 0.7}) blur(${settings.backgroundBlur || 0}px)`
+                  : `brightness(1.02) blur(${settings.backgroundBlur || 0}px) contrast(1.05)`,
             }}
-            className="w-full h-full object-cover object-center saturate-[0.85] opacity-25 dark:opacity-100 transition-opacity"
+            className="w-full h-full object-cover object-center saturate-[0.9] opacity-40 dark:opacity-100 transition-all duration-300"
           />
           <div
-            className="absolute inset-0 bg-gradient-to-t from-slate-50 via-slate-50/80 to-slate-50/40 dark:from-[#0b0d10] dark:via-[#0b0d10]/70 dark:to-[#0b0d10]/30 transition-colors"
+            className="absolute inset-0 bg-gradient-to-t from-slate-50 via-slate-50/90 to-slate-50/60 dark:from-[#0b0d10] dark:via-[#0b0d10]/70 dark:to-[#0b0d10]/30 transition-colors duration-300"
             style={{
-              backgroundColor: `rgba(11, 13, 16, ${(settings.backgroundDarkness ?? 0.75) * 0.5})`,
+              backgroundColor:
+                theme === 'dark'
+                  ? `rgba(11, 13, 16, ${(settings.backgroundDarkness ?? 0.75) * 0.5})`
+                  : `rgba(255, 255, 255, ${(settings.backgroundDarkness ?? 0.75) * 0.55})`,
             }}
           />
         </div>

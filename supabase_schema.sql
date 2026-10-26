@@ -72,3 +72,45 @@ DROP POLICY IF EXISTS "Allow delete to shop-images" ON storage.objects;
 CREATE POLICY "Allow delete to shop-images"
 ON storage.objects FOR DELETE
 USING (bucket_id = 'shop-images');
+
+-- ========================================================
+-- 6. USERS & REGISTRATION TABLE
+-- ========================================================
+CREATE TABLE IF NOT EXISTS public.users (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT,
+    phone TEXT,
+    login_identifier TEXT NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT DEFAULT 'customer',
+    address TEXT,
+    telegram TEXT,
+    registered_at TIMESTAMPTZ DEFAULT NOW(),
+    total_orders NUMERIC DEFAULT 0,
+    total_spent NUMERIC DEFAULT 0,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read access to users" ON public.users;
+CREATE POLICY "Allow public read access to users"
+ON public.users FOR SELECT
+USING (true);
+
+DROP POLICY IF EXISTS "Allow public insert to users" ON public.users;
+CREATE POLICY "Allow public insert to users"
+ON public.users FOR INSERT
+WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow public update to users" ON public.users;
+CREATE POLICY "Allow public update to users"
+ON public.users FOR UPDATE
+USING (true);
+
+DROP POLICY IF EXISTS "Allow public delete to users" ON public.users;
+CREATE POLICY "Allow public delete to users"
+ON public.users FOR DELETE
+USING (true);

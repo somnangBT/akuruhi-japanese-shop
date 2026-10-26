@@ -29,6 +29,9 @@ import {
   saveProductToSupabase,
   deleteProductFromSupabase,
   uploadImageToSupabase,
+  fetchUsersFromSupabase,
+  saveUserToSupabase,
+  deleteUserFromSupabase,
 } from '../utils/supabase';
 
 interface StoreContextType {
@@ -248,6 +251,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       fetchProductsFromSupabase().then((data) => {
         if (data && data.length > 0) {
           setProducts(data);
+        }
+      });
+      fetchUsersFromSupabase().then((data) => {
+        if (data && data.length > 0) {
+          setRegisteredUsers(data);
         }
       });
     }
@@ -844,6 +852,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     setRegisteredUsers((prev) => [newUser, ...prev]);
+    if (isSupabaseConfigured()) {
+      saveUserToSupabase(newUser);
+    }
     setCurrentUser(newUser);
     setIsAuthModalOpen(false);
     setActiveView('store');
@@ -977,15 +988,23 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const updated = { ...currentUser, ...updates };
     setCurrentUser(updated);
     setRegisteredUsers((prev) =>
-      prev.map((u) => (u.id === currentUser.id ? { ...u, ...updates } : u))
+      prev.map((u) => (u.id === currentUser.id ? updated : u))
     );
+    if (isSupabaseConfigured()) {
+      saveUserToSupabase(updated);
+    }
     showToast('Profile information saved.');
   };
 
   const updateUserByAdmin = (userId: string, updates: Partial<User>) => {
-    setRegisteredUsers((prev) =>
-      prev.map((u) => (u.id === userId ? { ...u, ...updates } : u))
-    );
+    setRegisteredUsers((prev) => {
+      const updatedList = prev.map((u) => (u.id === userId ? { ...u, ...updates } : u));
+      const target = updatedList.find((u) => u.id === userId);
+      if (target && isSupabaseConfigured()) {
+        saveUserToSupabase(target);
+      }
+      return updatedList;
+    });
     if (currentUser?.id === userId) {
       setCurrentUser((prev) => (prev ? { ...prev, ...updates } : null));
     }
@@ -994,6 +1013,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const deleteUserByAdmin = (userId: string) => {
     setRegisteredUsers((prev) => prev.filter((u) => u.id !== userId));
+    if (isSupabaseConfigured()) {
+      deleteUserFromSupabase(userId);
+    }
     showToast('User record removed.');
   };
 

@@ -1486,11 +1486,11 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {/* Sliders for Darkness & Blur */}
-              <div className="pt-3 border-t border-slate-200 dark:border-neutral-850 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <div className="flex justify-between text-slate-600 dark:text-neutral-400 text-[11px] mb-1">
-                    <span>Darkness Dimmer (Contrast)</span>
-                    <span className="font-mono text-slate-900 dark:text-white font-semibold">
+              <div className="pt-3 border-t border-slate-300 dark:border-neutral-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-3 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs">
+                  <div className="flex justify-between text-slate-800 dark:text-neutral-200 text-xs font-semibold mb-1.5">
+                    <span>Background Contrast & Dimmer</span>
+                    <span className="font-mono text-rose-600 dark:text-rose-400 font-bold">
                       {Math.round((settings.backgroundDarkness ?? 0.75) * 100)}%
                     </span>
                   </div>
@@ -1503,17 +1503,18 @@ export const AdminDashboard: React.FC = () => {
                     onChange={(e) =>
                       updateSettings({ backgroundDarkness: parseFloat(e.target.value) })
                     }
-                    className="w-full accent-rose-500 bg-slate-200 dark:bg-neutral-800 cursor-pointer"
+                    className="w-full accent-rose-600 h-2 bg-slate-300 dark:bg-neutral-750 rounded-lg cursor-pointer"
                   />
-                  <div className="text-[10px] text-slate-500 dark:text-neutral-500 mt-0.5">
-                    Higher dimming ensures high contrast for all text.
+                  <div className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1.5 flex items-center justify-between">
+                    <span>☀️ Daytime: Light Veil</span>
+                    <span>🌙 Night: Dark Scrim</span>
                   </div>
                 </div>
 
-                <div>
-                  <div className="flex justify-between text-slate-600 dark:text-neutral-400 text-[11px] mb-1">
+                <div className="p-3 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs">
+                  <div className="flex justify-between text-slate-800 dark:text-neutral-200 text-xs font-semibold mb-1.5">
                     <span>Atmospheric Blur</span>
-                    <span className="font-mono text-slate-900 dark:text-white font-semibold">
+                    <span className="font-mono text-sky-600 dark:text-sky-400 font-bold">
                       {settings.backgroundBlur || 0}px
                     </span>
                   </div>
@@ -1526,9 +1527,9 @@ export const AdminDashboard: React.FC = () => {
                     onChange={(e) =>
                       updateSettings({ backgroundBlur: parseInt(e.target.value) || 0 })
                     }
-                    className="w-full accent-sky-500 bg-slate-200 dark:bg-neutral-800 cursor-pointer"
+                    className="w-full accent-sky-600 h-2 bg-slate-300 dark:bg-neutral-750 rounded-lg cursor-pointer"
                   />
-                  <div className="text-[10px] text-slate-500 dark:text-neutral-500 mt-0.5">
+                  <div className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1.5">
                     Softens photographic details for clean readability.
                   </div>
                 </div>
