@@ -265,7 +265,7 @@ export const AuthGate: React.FC = () => {
                     placeholder="e.g. sophia.sokha@gmail.com or 012888999"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm shadow-xs"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm shadow-xs"
                   />
                 </div>
                 <span className="text-[10px] text-slate-500 dark:text-neutral-400 mt-1 block">
@@ -286,7 +286,7 @@ export const AuthGate: React.FC = () => {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm font-mono shadow-xs"
                   />
                   <button
                     type="button"
@@ -350,7 +350,7 @@ export const AuthGate: React.FC = () => {
                     placeholder="e.g. Liam Sovann"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm shadow-xs"
+                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm shadow-xs"
                   />
                 </div>
               </div>
@@ -368,7 +368,7 @@ export const AuthGate: React.FC = () => {
                     placeholder="yourname@gmail.com or 012888999"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm shadow-xs"
+                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm shadow-xs"
                   />
                 </div>
                 <span className="text-[10px] text-slate-500 dark:text-neutral-400 mt-0.5 block">
@@ -391,7 +391,7 @@ export const AuthGate: React.FC = () => {
                     placeholder="យ៉ាងហោច ៦ តួអក្សរ (Min 6 chars)"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-9 pr-10 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-10 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm font-mono shadow-xs"
                   />
                   <button
                     type="button"
@@ -419,7 +419,7 @@ export const AuthGate: React.FC = () => {
                     placeholder="វាយលេខសម្ងាត់ម្តងទៀត"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-9 pr-10 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-10 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm font-mono shadow-xs"
                   />
                   <button
                     type="button"
@@ -444,7 +444,7 @@ export const AuthGate: React.FC = () => {
                     placeholder="e.g. Street 51, BKK1, Phnom Penh"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm shadow-xs"
+                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm shadow-xs"
                   />
                 </div>
               </div>
@@ -460,7 +460,7 @@ export const AuthGate: React.FC = () => {
                     placeholder="@username"
                     value={telegram}
                     onChange={(e) => setTelegram(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm font-mono shadow-xs"
                   />
                 </div>
               </div>
@@ -521,7 +521,7 @@ export const AuthGate: React.FC = () => {
                     placeholder="admin@gmail.com"
                     value={adminGmail}
                     onChange={(e) => setAdminGmail(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-base sm:text-sm font-mono shadow-xs"
                   />
                 </div>
               </div>
@@ -539,7 +539,7 @@ export const AuthGate: React.FC = () => {
                     placeholder="••••••••"
                     value={adminPassword}
                     onChange={(e) => setAdminPassword(e.target.value)}
-                    className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-base sm:text-sm font-mono shadow-xs"
                   />
                   <button
                     type="button"

@@ -98,7 +98,7 @@ const AppContent: React.FC = () => {
       </div>
 
       {/* Main View Router - Padded top so content sits perfectly below fixed menu bar */}
-      <main className="relative z-10 flex-1 pt-[101px]">
+      <main className="relative z-10 flex-1 pt-[92px] sm:pt-[106px]">
         {activeView === 'admin' && (
           currentUser?.role === 'admin' ? (
             <AdminDashboard />

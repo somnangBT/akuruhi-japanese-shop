@@ -43,16 +43,16 @@ export const Hero: React.FC = () => {
         </div>
       )}
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
         <div className="max-w-3xl">
           {/* Subtle Trust Label */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400 mb-4"
+            className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400 mb-3 sm:mb-4"
           >
-            <span>{settings.heroBadgeText || 'Akuruhi Cambodia · Since 1998 · Phnom Penh Wholesale & Retail'}</span>
+            <span className="leading-snug">{settings.heroBadgeText || 'Akuruhi Cambodia · Since 1998 · Phnom Penh Wholesale & Retail'}</span>
           </motion.div>
 
           {/* Main Headline */}
@@ -60,7 +60,7 @@ export const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.1] mb-6"
+            className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15] mb-4 sm:mb-6"
             style={{ textWrap: 'balance' }}
           >
             {settings.heroTitle || 'Authentic Japanese Food & Beverage Supply for Cambodia.'}
@@ -71,7 +71,7 @@ export const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-base sm:text-lg text-slate-700 dark:text-neutral-300 leading-relaxed mb-8 max-w-2xl"
+            className="text-sm sm:text-lg text-slate-700 dark:text-neutral-300 leading-relaxed mb-6 sm:mb-8 max-w-2xl"
           >
             {settings.heroSubtitle ||
               'From A5 Japanese Wagyu and Toyosu bluefin tuna to brewed soy sauces, golden curries, and Dassai Junmai Daiginjo sake. Direct import with cold-chain guarantee.'}
@@ -82,12 +82,12 @@ export const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-wrap items-center gap-3"
+            className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3"
           >
             <button
               onClick={scrollToCatalog}
               style={{ backgroundColor: settings.brandColor || '#e11d48' }}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl text-white font-medium text-sm transition-opacity hover:opacity-90 shadow-lg shadow-rose-950/20 active:scale-[0.98] whitespace-nowrap cursor-pointer"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-white font-medium text-sm transition-opacity hover:opacity-90 shadow-lg shadow-rose-950/20 active:scale-[0.98] whitespace-nowrap cursor-pointer"
             >
               <ShoppingCart className="w-4 h-4" />
               <span>Explore Products</span>
@@ -97,7 +97,7 @@ export const Hero: React.FC = () => {
               href={settings.telegramDirectUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#229ED9] hover:bg-[#1e8ec3] text-white font-medium text-sm transition-all shadow-lg shadow-sky-950/20 active:scale-[0.98] whitespace-nowrap cursor-pointer"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#229ED9] hover:bg-[#1e8ec3] text-white font-medium text-sm transition-all shadow-lg shadow-sky-950/20 active:scale-[0.98] whitespace-nowrap cursor-pointer"
             >
               <Send className="w-4 h-4" />
               <span>Order via Telegram</span>
@@ -105,7 +105,7 @@ export const Hero: React.FC = () => {
 
             <button
               onClick={() => setIsQuotationModalOpen(true)}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white/95 dark:bg-neutral-900/90 hover:bg-white dark:hover:bg-neutral-800 text-slate-800 dark:text-neutral-200 border border-slate-300 dark:border-neutral-700 font-medium text-sm transition-colors shadow-xs whitespace-nowrap cursor-pointer"
+              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/95 dark:bg-neutral-900/90 hover:bg-white dark:hover:bg-neutral-800 text-slate-800 dark:text-neutral-200 border border-slate-300 dark:border-neutral-700 font-medium text-sm transition-colors shadow-xs whitespace-nowrap cursor-pointer"
             >
               <FileText className="w-4 h-4 text-slate-500 dark:text-neutral-400" />
               <span>Quotation PDF</span>

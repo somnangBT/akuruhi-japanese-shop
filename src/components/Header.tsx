@@ -40,9 +40,9 @@ export const Header: React.FC = () => {
   return (
     <header className="w-full bg-white/95 dark:bg-[#0d0f14]/95 backdrop-blur-md border-b border-slate-200/90 dark:border-neutral-800/80 shadow-xs transition-colors duration-200">
       {/* Top Quiet Announcement Bar */}
-      <div className="bg-slate-100 dark:bg-neutral-950/90 text-slate-600 dark:text-neutral-400 text-xs py-1.5 px-4 border-b border-slate-200/80 dark:border-neutral-850 flex items-center justify-between transition-colors">
-        <div className="mx-auto flex items-center gap-2 truncate max-w-4xl text-center">
-          <span className="text-rose-600 dark:text-rose-500 font-semibold tracking-wide">AKURUHI PHNOM PENH</span>
+      <div className="bg-slate-100 dark:bg-neutral-950/90 text-slate-600 dark:text-neutral-400 text-[11px] sm:text-xs py-1 sm:py-1.5 px-3 sm:px-4 border-b border-slate-200/80 dark:border-neutral-850 flex items-center justify-between transition-colors">
+        <div className="mx-auto flex items-center gap-1.5 sm:gap-2 truncate max-w-4xl text-center">
+          <span className="text-rose-600 dark:text-rose-500 font-semibold tracking-wide shrink-0">AKURUHI PHNOM PENH</span>
           <span className="text-slate-400 dark:text-neutral-600">·</span>
           <span className="truncate">{settings.announcementText}</span>
         </div>
@@ -62,32 +62,32 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Main Top Bar Contract */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between gap-2 sm:gap-6">
         {/* Zone 1: Brand Wordmark */}
-        <div className="flex items-center gap-4 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0 min-w-0">
           <button
             onClick={() => setActiveView('store')}
-            className="flex items-center gap-2.5 text-left group"
+            className="flex items-center gap-2 sm:gap-2.5 text-left group min-w-0"
           >
             {settings.logoUrl ? (
               <img
                 src={settings.logoUrl}
                 alt={`${settings.storeName} Logo`}
-                className="w-9 h-9 rounded-lg object-contain bg-neutral-100 dark:bg-white/10 border border-slate-200 dark:border-neutral-700/60 p-0.5 shadow-xs"
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg object-contain bg-neutral-100 dark:bg-white/10 border border-slate-200 dark:border-neutral-700/60 p-0.5 shadow-xs shrink-0"
               />
             ) : (
               <div
                 style={{ backgroundColor: settings.brandColor || '#e11d48' }}
-                className="w-8 h-8 rounded-md flex items-center justify-center font-display font-extrabold text-white text-base shadow-sm shadow-rose-950/20"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-md flex items-center justify-center font-display font-extrabold text-white text-sm sm:text-base shadow-sm shadow-rose-950/20 shrink-0"
               >
                 {settings.logoText || '旭'}
               </div>
             )}
-            <div className="flex flex-col">
-              <span className="font-display font-bold text-lg sm:text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-slate-700 dark:group-hover:text-neutral-200 transition-colors whitespace-nowrap">
+            <div className="flex flex-col min-w-0">
+              <span className="font-display font-bold text-sm sm:text-lg md:text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-slate-700 dark:group-hover:text-neutral-200 transition-colors truncate max-w-[130px] xs:max-w-[180px] sm:max-w-xs md:max-w-none">
                 {settings.storeName}
               </span>
-              <span className="text-[10px] tracking-widest text-slate-500 dark:text-neutral-400 uppercase truncate max-w-[180px] sm:max-w-xs">
+              <span className="text-[9px] sm:text-[10px] tracking-widest text-slate-500 dark:text-neutral-400 uppercase truncate max-w-[130px] sm:max-w-xs hidden xs:block">
                 {settings.tagline || 'Japanese Food & Beverage Supply'}
               </span>
             </div>
@@ -95,7 +95,7 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Zone 2: Navigation Links (Strict RBAC visibility) */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-neutral-300">
+        <nav className="hidden md:flex items-center gap-3 lg:gap-6 text-sm font-medium text-slate-600 dark:text-neutral-300">
           <button
             onClick={() => setActiveView('store')}
             className={`whitespace-nowrap transition-colors hover:text-slate-900 dark:hover:text-white ${
@@ -159,7 +159,7 @@ export const Header: React.FC = () => {
         </nav>
 
         {/* Zone 3: Actions (Theme Toggle, Cart & Account Pill) */}
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* Light / Dark Mode Toggle Button */}
           <button
             onClick={toggleTheme}
@@ -179,22 +179,22 @@ export const Header: React.FC = () => {
             {currentUser ? (
               <button
                 onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium border transition-colors whitespace-nowrap ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-xl text-xs font-medium border transition-colors whitespace-nowrap ${
                   isAdmin
                     ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-500/40 hover:bg-amber-100 dark:hover:bg-amber-900/40'
                     : 'bg-slate-100 dark:bg-neutral-800/80 text-slate-800 dark:text-neutral-200 border-slate-200 dark:border-neutral-700/60 hover:bg-slate-200 dark:hover:bg-neutral-800'
                 }`}
               >
                 {isAdmin ? (
-                  <div className="w-5 h-5 rounded-md bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-[10px] text-amber-700 dark:text-amber-300 font-bold">
+                  <div className="w-5 h-5 rounded-md bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-[10px] text-amber-700 dark:text-amber-300 font-bold shrink-0">
                     <KeyRound className="w-3 h-3 text-amber-600 dark:text-amber-400" />
                   </div>
                 ) : (
-                  <div className="w-5 h-5 rounded-full bg-rose-600/10 dark:bg-rose-600/20 border border-rose-500/30 flex items-center justify-center text-[10px] text-rose-600 dark:text-rose-300 font-bold">
+                  <div className="w-5 h-5 rounded-full bg-rose-600/10 dark:bg-rose-600/20 border border-rose-500/30 flex items-center justify-center text-[10px] text-rose-600 dark:text-rose-300 font-bold shrink-0">
                     <User className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                   </div>
                 )}
-                <div className="text-left flex flex-col">
+                <div className="text-left hidden sm:flex flex-col">
                   <span className="font-semibold text-[11px] truncate max-w-[110px]">
                     {currentUser.name}
                   </span>
@@ -206,15 +206,16 @@ export const Header: React.FC = () => {
                     {isAdmin ? 'Administrator' : 'Customer Account'}
                   </span>
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 dark:text-neutral-400 ml-0.5" />
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 dark:text-neutral-400" />
               </button>
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-750 text-slate-700 dark:text-neutral-200 text-xs font-medium border border-slate-200 dark:border-neutral-700 transition-colors whitespace-nowrap"
+                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-750 text-slate-700 dark:text-neutral-200 text-xs font-medium border border-slate-200 dark:border-neutral-700 transition-colors whitespace-nowrap"
               >
                 <User className="w-3.5 h-3.5 text-slate-500 dark:text-neutral-400" />
-                <span>Sign In / Register</span>
+                <span className="hidden sm:inline">Sign In / Register</span>
+                <span className="sm:hidden">Sign In</span>
               </button>
             )}
 
@@ -358,7 +359,7 @@ export const Header: React.FC = () => {
 
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-neutral-950 border-b border-slate-200 dark:border-neutral-800 px-4 py-3 space-y-2 transition-colors">
+        <div className="md:hidden bg-white/98 dark:bg-[#0d0f14]/98 backdrop-blur-lg border-b border-slate-200 dark:border-neutral-800 px-4 py-3 space-y-2 transition-colors max-h-[80vh] overflow-y-auto shadow-2xl">
           <button
             onClick={() => {
               setActiveView('store');

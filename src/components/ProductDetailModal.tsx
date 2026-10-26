@@ -108,7 +108,7 @@ export const ProductDetailModal: React.FC = () => {
             {/* Top Section: Imagery & Contiguous Purchase Module */}
             <div className="grid grid-cols-1 md:grid-cols-2">
               {/* Product Image */}
-              <div className="relative aspect-[4/3] md:aspect-auto bg-slate-100 dark:bg-neutral-900 overflow-hidden min-h-[300px] md:min-h-full">
+              <div className="relative aspect-[4/3] md:aspect-auto bg-slate-100 dark:bg-neutral-900 overflow-hidden min-h-[200px] sm:min-h-[260px] md:min-h-full">
                 <img
                   src={selectedProduct.imageUrl}
                   alt={selectedProduct.name}
@@ -440,7 +440,7 @@ export const ProductDetailModal: React.FC = () => {
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Tell other chefs and customers about flavor, tenderness, packaging condition upon delivery, cooking method, or pairing..."
-                        className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white text-xs placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 leading-relaxed shadow-xs"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white text-base sm:text-xs placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 leading-relaxed shadow-xs"
                       />
                     </div>
 

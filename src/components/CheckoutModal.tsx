@@ -160,12 +160,12 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.96 }}
-          className="relative w-full max-w-2xl bg-white dark:bg-[#11141c] rounded-2xl border border-slate-200 dark:border-neutral-800 shadow-2xl overflow-hidden my-8 text-slate-900 dark:text-neutral-100"
+          className="relative w-full max-w-2xl bg-white dark:bg-[#11141c] rounded-2xl border border-slate-200 dark:border-neutral-800 shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col text-slate-900 dark:text-neutral-100"
         >
           {/* Header */}
           <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-neutral-800 flex items-center justify-between gap-3">
@@ -330,7 +330,7 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmitOrder} className="p-6 space-y-6">
+            <form onSubmit={handleSubmitOrder} className="p-4 sm:p-6 space-y-5 sm:space-y-6 overflow-y-auto flex-1">
               {/* Order Summary Recap */}
               <div className="p-4 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-850 flex items-center justify-between text-xs shadow-xs">
                 <div>
@@ -366,7 +366,7 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
                       placeholder="e.g. Sophia Sokha"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-base sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
                     />
                   </div>
 
@@ -380,7 +380,7 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
                       placeholder="e.g. +855 12 345 678"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-base sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
                     />
                   </div>
                 </div>
@@ -397,7 +397,7 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
                         placeholder="username"
                         value={telegramHandle.replace('@', '')}
                         onChange={(e) => setTelegramHandle(e.target.value)}
-                        className="w-full pl-7 pr-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
+                        className="w-full pl-7 pr-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-base sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
                       />
                     </div>
                   </div>
@@ -411,7 +411,7 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
                       placeholder="your.email@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-base sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
                     />
                   </div>
                 </div>
@@ -426,7 +426,7 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
                     placeholder="e.g. No. 42, St 310, Boeung Keng Kang 1, Phnom Penh"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-base sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
                   />
                 </div>
 
@@ -439,7 +439,7 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
                     placeholder="e.g. Keep Wagyu beef insulated, deliver to 2nd floor reception"
                     value={deliveryNotes}
                     onChange={(e) => setDeliveryNotes(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-base sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
                   />
                 </div>
               </div>
@@ -688,7 +688,7 @@ Status: Customer confirmed QR transfer & receipt. Please verify and dispatch ord
                           placeholder="Or enter Ref ID (e.g. ABA-123456)"
                           value={transactionRef}
                           onChange={(e) => setTransactionRef(e.target.value)}
-                          className="w-full px-3 py-2.5 rounded-lg bg-white dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
+                          className="w-full px-3 py-2.5 rounded-lg bg-white dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-base sm:text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 shadow-xs"
                         />
                       </div>
                     </div>

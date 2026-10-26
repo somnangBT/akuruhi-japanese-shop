@@ -189,7 +189,7 @@ export const AdminUsersTab: React.FC = () => {
               placeholder="Search by customer name, Gmail, or phone..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-xl bg-white dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-rose-500"
+              className="w-full pl-9 pr-3 py-2 rounded-xl bg-white dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white text-base sm:text-xs focus:outline-none focus:border-rose-500"
             />
           </div>
 
@@ -335,15 +335,15 @@ export const AdminUsersTab: React.FC = () => {
 
       {/* Edit User Modal */}
       {editingUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-md bg-white dark:bg-[#11141c] text-slate-900 dark:text-neutral-100 rounded-2xl border border-slate-200 dark:border-neutral-750 p-6 space-y-4 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-md bg-white dark:bg-[#11141c] text-slate-900 dark:text-neutral-100 rounded-2xl border border-slate-200 dark:border-neutral-750 p-6 space-y-4 shadow-2xl my-auto max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-neutral-800">
               <h3 className="font-display font-bold text-base text-slate-900 dark:text-white">
                 Modify Account: {editingUser.name}
               </h3>
               <button
                 onClick={() => setEditingUser(null)}
-                className="p-1 text-slate-400 hover:text-slate-700 dark:text-neutral-400 dark:hover:text-white"
+                className="p-1 text-slate-400 hover:text-slate-700 dark:text-neutral-400 dark:hover:text-white cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -357,7 +357,7 @@ export const AdminUsersTab: React.FC = () => {
                   required
                   value={editFormData.name}
                   onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white text-base sm:text-xs"
                 />
               </div>
 
@@ -367,7 +367,7 @@ export const AdminUsersTab: React.FC = () => {
                   type="email"
                   value={editFormData.email}
                   onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white font-mono"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white font-mono text-base sm:text-xs"
                 />
               </div>
 
@@ -377,7 +377,7 @@ export const AdminUsersTab: React.FC = () => {
                   type="text"
                   value={editFormData.phone}
                   onChange={(e) => setEditFormData({ ...editFormData, phone: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white font-mono"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white font-mono text-base sm:text-xs"
                 />
               </div>
 
@@ -388,7 +388,7 @@ export const AdminUsersTab: React.FC = () => {
                   placeholder="Enter new password to reset, or leave blank to keep unchanged"
                   value={editFormData.password || ''}
                   onChange={(e) => setEditFormData({ ...editFormData, password: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white font-mono"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white font-mono text-base sm:text-xs"
                 />
                 <span className="text-[10px] text-slate-500 dark:text-neutral-500 mt-0.5 block">
                   Customer passwords are encrypted and hidden for privacy. Only enter a new password if resetting.
@@ -401,7 +401,7 @@ export const AdminUsersTab: React.FC = () => {
                   rows={2}
                   value={editFormData.address}
                   onChange={(e) => setEditFormData({ ...editFormData, address: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white text-base sm:text-xs"
                 />
               </div>
 
@@ -411,7 +411,7 @@ export const AdminUsersTab: React.FC = () => {
                   type="text"
                   value={editFormData.telegram}
                   onChange={(e) => setEditFormData({ ...editFormData, telegram: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white font-mono"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white font-mono text-base sm:text-xs"
                 />
               </div>
 

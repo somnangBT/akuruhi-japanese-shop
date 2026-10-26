@@ -110,7 +110,7 @@ export const AuthModal: React.FC = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="relative w-full max-w-md bg-white dark:bg-[#12151c] rounded-2xl border border-slate-200 dark:border-neutral-800 shadow-2xl p-6 sm:p-8 space-y-5 my-8 text-slate-900 dark:text-neutral-100"
+          className="relative w-full max-w-md bg-white dark:bg-[#12151c] rounded-2xl border border-slate-200 dark:border-neutral-800 shadow-2xl p-6 sm:p-8 space-y-5 my-auto max-h-[92vh] overflow-y-auto text-slate-900 dark:text-neutral-100"
         >
           {/* Close */}
           <button
@@ -272,7 +272,7 @@ export const AuthModal: React.FC = () => {
                         placeholder="e.g. sophia.sokha@gmail.com or 012888999"
                         value={identifier}
                         onChange={(e) => setIdentifier(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm shadow-xs"
+                        className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm shadow-xs"
                       />
                     </div>
                   </div>
@@ -290,7 +290,7 @@ export const AuthModal: React.FC = () => {
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                        className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm font-mono shadow-xs"
                       />
                       <button
                         type="button"
@@ -340,7 +340,7 @@ export const AuthModal: React.FC = () => {
                         placeholder="e.g. Liam Sovann"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm shadow-xs"
+                        className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm shadow-xs"
                       />
                     </div>
                   </div>
@@ -358,7 +358,7 @@ export const AuthModal: React.FC = () => {
                         placeholder="yourname@gmail.com or 012888999"
                         value={identifier}
                         onChange={(e) => setIdentifier(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm shadow-xs"
+                        className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm shadow-xs"
                       />
                     </div>
                   </div>
@@ -377,7 +377,7 @@ export const AuthModal: React.FC = () => {
                         placeholder="យ៉ាងហោច ៦ តួអក្សរ"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full pl-9 pr-10 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                        className="w-full pl-9 pr-10 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm font-mono shadow-xs"
                       />
                       <button
                         type="button"
@@ -405,7 +405,7 @@ export const AuthModal: React.FC = () => {
                         placeholder="វាយលេខសម្ងាត់ម្តងទៀត"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full pl-9 pr-10 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                        className="w-full pl-9 pr-10 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm font-mono shadow-xs"
                       />
                       <button
                         type="button"
@@ -430,7 +430,7 @@ export const AuthModal: React.FC = () => {
                         placeholder="e.g. Street 51, BKK1, Phnom Penh"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm shadow-xs"
+                        className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm shadow-xs"
                       />
                     </div>
                   </div>
@@ -446,7 +446,7 @@ export const AuthModal: React.FC = () => {
                         placeholder="@username"
                         value={telegram}
                         onChange={(e) => setTelegram(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-sm font-mono shadow-xs"
+                        className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-rose-500 text-base sm:text-sm font-mono shadow-xs"
                       />
                     </div>
                   </div>
@@ -495,7 +495,7 @@ export const AuthModal: React.FC = () => {
                     placeholder="admin@gmail.com"
                     value={adminGmail}
                     onChange={(e) => setAdminGmail(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-base sm:text-sm font-mono shadow-xs"
                   />
                 </div>
               </div>
@@ -513,7 +513,7 @@ export const AuthModal: React.FC = () => {
                     placeholder="••••••••"
                     value={adminPassword}
                     onChange={(e) => setAdminPassword(e.target.value)}
-                    className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-sm font-mono shadow-xs"
+                    className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-amber-500 text-base sm:text-sm font-mono shadow-xs"
                   />
                   <button
                     type="button"

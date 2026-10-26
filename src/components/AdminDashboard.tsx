@@ -464,7 +464,7 @@ export const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Navigation Tabs - Fixed / Sticky right beneath top header */}
-      <div className="sticky top-[101px] z-30 bg-slate-50/95 dark:bg-[#0b0d10]/95 backdrop-blur-md py-2.5 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 border-b border-slate-200 dark:border-neutral-800 flex items-center gap-2 overflow-x-auto scrollbar-none shadow-xs transition-all mb-6">
+      <div className="sticky top-[92px] sm:top-[106px] z-30 bg-slate-50/95 dark:bg-[#0b0d10]/95 backdrop-blur-md py-2.5 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 border-b border-slate-200 dark:border-neutral-800 flex items-center gap-2 overflow-x-auto scrollbar-none shadow-xs transition-all mb-6">
         <button
           onClick={() => setActiveTab('products')}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
@@ -551,7 +551,7 @@ export const AdminDashboard: React.FC = () => {
                   placeholder="Search code, name, brand..."
                   value={productSearch}
                   onChange={(e) => setProductSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-rose-500"
+                  className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-base sm:text-xs text-slate-900 dark:text-white focus:outline-none focus:border-rose-500"
                 />
               </div>
 
@@ -872,7 +872,7 @@ export const AdminDashboard: React.FC = () => {
                   placeholder="Search reviews by customer or text..."
                   value={reviewSearch}
                   onChange={(e) => setReviewSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-rose-500"
+                  className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-base sm:text-xs text-slate-900 dark:text-white focus:outline-none focus:border-rose-500"
                 />
               </div>
 
@@ -2305,8 +2305,8 @@ export const AdminDashboard: React.FC = () => {
 
       {/* --- ADD / EDIT PRODUCT MODAL --- */}
       {isProductModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-xl bg-white dark:bg-[#11141c] rounded-2xl border border-slate-200 dark:border-neutral-800 shadow-2xl overflow-hidden my-8 p-6 space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-xl bg-white dark:bg-[#11141c] rounded-2xl border border-slate-200 dark:border-neutral-800 shadow-2xl overflow-hidden my-auto max-h-[92vh] overflow-y-auto p-4 sm:p-6 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-neutral-800">
               <h2 className="font-display font-bold text-lg text-slate-900 dark:text-white">
                 {editingProductId ? 'Edit Product' : 'Add New Product to Catalog'}
@@ -2611,8 +2611,8 @@ export const AdminDashboard: React.FC = () => {
 
       {/* --- ORDER DETAIL MODAL --- */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-lg bg-white dark:bg-[#11141c] rounded-2xl border border-slate-200 dark:border-neutral-800 shadow-2xl p-6 space-y-4 my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-lg bg-white dark:bg-[#11141c] rounded-2xl border border-slate-200 dark:border-neutral-800 shadow-2xl p-4 sm:p-6 space-y-4 my-auto max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-neutral-800">
               <div>
                 <span className="text-xs text-slate-500 dark:text-neutral-500">Order Inspection</span>
