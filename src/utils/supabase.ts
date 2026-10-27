@@ -1,7 +1,8 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Product, User, StoreSettings } from '../types';
+import { Product, User, StoreSettings, Order, OrderStatus } from '../types';
 import { INITIAL_PRODUCTS, DEFAULT_STORE_SETTINGS } from '../data/initialProducts';
 import { INITIAL_REGISTERED_USERS } from '../data/initialUsers';
+import { INITIAL_ORDERS } from '../data/initialOrders';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -484,6 +485,239 @@ export const subscribeToSettings = (onUpdate: (settings: StoreSettings) => void)
     };
   } catch (err) {
     console.warn('Realtime settings subscription error:', err);
+    return () => {};
+  }
+};
+
+// ========================================================
+// CUSTOMER PURCHASES & ORDERS SUPABASE OPERATIONS
+// ========================================================
+
+/**
+ * Convert database row to frontend Order type
+ */
+export const mapRowToOrder = (row: any): Order => ({
+  id: row.id,
+  orderNumber: row.order_number || row.orderNumber || '',
+  customerId: row.customer_id || row.customerId || '',
+  customerName: row.customer_name || row.customerName || '',
+  customerPhone: row.customer_phone || row.customerPhone || '',
+  customerEmail: row.customer_email || row.customerEmail || '',
+  deliveryAddress: row.delivery_address || row.deliveryAddress || '',
+  telegramHandle: row.telegram_handle || row.telegramHandle || undefined,
+  deliveryNotes: row.delivery_notes || row.deliveryNotes || undefined,
+  items: Array.isArray(row.items) ? row.items : [],
+  subtotal: Number(row.subtotal) || 0,
+  vat: Number(row.vat) || 0,
+  deliveryFee: Number(row.delivery_fee ?? row.deliveryFee) || 0,
+  total: Number(row.total) || 0,
+  paymentMethod: row.payment_method || row.paymentMethod || 'qr_code',
+  paymentStatus: row.payment_status || row.paymentStatus || 'unpaid',
+  orderStatus: row.order_status || row.orderStatus || 'pending_payment',
+  paymentSlipUrl: row.payment_slip_url || row.paymentSlipUrl || undefined,
+  transactionRef: row.transaction_ref || row.transactionRef || undefined,
+  createdAt: row.created_at || row.createdAt || new Date().toISOString(),
+  updatedAt: row.updated_at || row.updatedAt || new Date().toISOString(),
+});
+
+/**
+ * Convert frontend Order type to database snake_case row
+ */
+export const mapOrderToRow = (order: Order) => ({
+  id: order.id,
+  order_number: order.orderNumber,
+  customer_id: order.customerId,
+  customer_name: order.customerName,
+  customer_phone: order.customerPhone,
+  customer_email: order.customerEmail || null,
+  delivery_address: order.deliveryAddress,
+  telegram_handle: order.telegramHandle || null,
+  delivery_notes: order.deliveryNotes || null,
+  items: order.items || [],
+  subtotal: order.subtotal,
+  vat: order.vat || 0,
+  delivery_fee: order.deliveryFee || 0,
+  total: order.total,
+  payment_method: order.paymentMethod,
+  payment_status: order.paymentStatus,
+  order_status: order.orderStatus,
+  payment_slip_url: order.paymentSlipUrl || null,
+  transaction_ref: order.transactionRef || null,
+  created_at: order.createdAt,
+  updated_at: order.updatedAt,
+});
+
+/**
+ * Fetch all customer purchase orders from Supabase
+ */
+export const fetchOrdersFromSupabase = async (): Promise<Order[] | null> => {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('Supabase fetchOrders error:', error.message);
+      return null;
+    }
+
+    if (data && data.length > 0) {
+      return data.map(mapRowToOrder);
+    }
+
+    // Auto-seed initial sample orders if table is empty
+    if (data && data.length === 0) {
+      console.log('Supabase orders table is empty. Auto-seeding initial orders...');
+      const rowsToInsert = INITIAL_ORDERS.map(mapOrderToRow);
+      const { error: seedError } = await supabase.from('orders').insert(rowsToInsert);
+      if (!seedError) {
+        return INITIAL_ORDERS;
+      } else {
+        console.warn('Auto-seed orders error:', seedError.message);
+      }
+    }
+
+    return null;
+  } catch (err) {
+    console.warn('Failed to fetch orders from Supabase:', err);
+    return null;
+  }
+};
+
+/**
+ * Save / Upsert a single order to Supabase
+ */
+export const saveOrderToSupabase = async (order: Order): Promise<{ success: boolean; error?: string }> => {
+  if (!supabase) return { success: false, error: 'Supabase client not initialized' };
+  try {
+    const row = mapOrderToRow(order);
+    // 1. Try upsert
+    const { error: upsertErr } = await supabase
+      .from('orders')
+      .upsert(row, { onConflict: 'id' });
+
+    if (!upsertErr) {
+      console.log('Order synced to Supabase successfully:', order.orderNumber);
+      return { success: true };
+    }
+
+    // 2. Fallback to direct insert
+    console.warn('Supabase upsert notice for order, trying direct insert:', upsertErr.message);
+    const { error: insertErr } = await supabase.from('orders').insert(row);
+    if (!insertErr) {
+      console.log('Order inserted into Supabase successfully:', order.orderNumber);
+      return { success: true };
+    }
+
+    console.error('Supabase saveOrder failed:', insertErr.message);
+    return { success: false, error: insertErr.message };
+  } catch (err: any) {
+    console.error('saveOrderToSupabase exception:', err);
+    return { success: false, error: err?.message || 'Network exception' };
+  }
+};
+
+/**
+ * Update order status and payment status in Supabase
+ */
+export const updateOrderStatusInSupabase = async (
+  orderId: string,
+  status: OrderStatus,
+  paymentStatus?: 'unpaid' | 'verification_pending' | 'paid'
+): Promise<boolean> => {
+  if (!supabase) return false;
+  try {
+    const updates: any = {
+      order_status: status,
+      updated_at: new Date().toISOString(),
+    };
+    if (paymentStatus !== undefined) {
+      updates.payment_status = paymentStatus;
+    }
+    const { error } = await supabase.from('orders').update(updates).eq('id', orderId);
+    if (error) {
+      console.error('Supabase updateOrderStatus error:', error.message);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('updateOrderStatusInSupabase exception:', err);
+    return false;
+  }
+};
+
+/**
+ * Delete a single purchase order from Supabase
+ */
+export const deleteOrderFromSupabase = async (orderId: string): Promise<boolean> => {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase.from('orders').delete().eq('id', orderId);
+    if (error) {
+      console.error('Supabase deleteOrder error:', error.message);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('deleteOrderFromSupabase exception:', err);
+    return false;
+  }
+};
+
+/**
+ * Bulk delete purchase orders from Supabase
+ */
+export const bulkDeleteOrdersFromSupabase = async (orderIds: string[]): Promise<boolean> => {
+  if (!supabase || orderIds.length === 0) return false;
+  try {
+    const { error } = await supabase.from('orders').delete().in('id', orderIds);
+    if (error) {
+      console.error('Supabase bulkDeleteOrders error:', error.message);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('bulkDeleteOrdersFromSupabase exception:', err);
+    return false;
+  }
+};
+
+/**
+ * Subscribe to realtime orders changes (insert, update, delete)
+ */
+export const subscribeToOrders = (
+  onOrderChange: (payload: { event: 'INSERT' | 'UPDATE' | 'DELETE'; order?: Order; orderId?: string }) => void
+) => {
+  if (!supabase) return () => {};
+  try {
+    const channel = supabase
+      .channel('orders_realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'orders' },
+        (payload: any) => {
+          if (payload.eventType === 'INSERT' && payload.new) {
+            onOrderChange({ event: 'INSERT', order: mapRowToOrder(payload.new) });
+          } else if (payload.eventType === 'UPDATE' && payload.new) {
+            onOrderChange({ event: 'UPDATE', order: mapRowToOrder(payload.new) });
+          } else if (payload.eventType === 'DELETE' && payload.old) {
+            onOrderChange({ event: 'DELETE', orderId: payload.old.id });
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      try {
+        supabase?.removeChannel(channel);
+      } catch {
+        // ignore
+      }
+    };
+  } catch (err) {
+    console.warn('Realtime orders subscription notice:', err);
     return () => {};
   }
 };

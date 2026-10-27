@@ -16,6 +16,7 @@ import {
 import { INITIAL_PRODUCTS, DEFAULT_STORE_SETTINGS } from '../data/initialProducts';
 import { INITIAL_REVIEWS } from '../data/initialReviews';
 import { INITIAL_REGISTERED_USERS } from '../data/initialUsers';
+import { INITIAL_ORDERS } from '../data/initialOrders';
 import { exportOrdersToExcel } from '../utils/excelExport';
 import {
   saveImageToAdministratorFolder,
@@ -37,6 +38,12 @@ import {
   saveSettingsToSupabaseDebounced,
   subscribeToSettings,
   subscribeToUsers,
+  fetchOrdersFromSupabase,
+  saveOrderToSupabase,
+  updateOrderStatusInSupabase,
+  deleteOrderFromSupabase,
+  bulkDeleteOrdersFromSupabase,
+  subscribeToOrders,
 } from '../utils/supabase';
 
 interface StoreContextType {
@@ -156,75 +163,6 @@ interface StoreContextType {
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
-// Initial sample orders for demonstration
-const INITIAL_ORDERS: Order[] = [
-  {
-    id: 'ord-1001',
-    orderNumber: 'AK-2026-8801',
-    customerId: 'user-c1',
-    customerName: 'Sophia Sokha',
-    customerPhone: '+855 12 345 678',
-    customerEmail: 'sophia.sokha@gmail.com',
-    deliveryAddress: 'No. 88, Street 240, Daun Penh, Phnom Penh',
-    telegramHandle: '@sophia_sokha',
-    deliveryNotes: 'Please call upon arrival. Keep frozen items chilled.',
-    items: [
-      {
-        product: INITIAL_PRODUCTS[0], // Wagyu A5 Ribeye
-        quantity: 2,
-      },
-      {
-        product: INITIAL_PRODUCTS[20], // Dassai 23
-        quantity: 1,
-      },
-    ],
-    subtotal: 350.00,
-    vat: 0,
-    deliveryFee: 0,
-    total: 350.00,
-    paymentMethod: 'qr_code',
-    paymentStatus: 'paid',
-    orderStatus: 'processing',
-    transactionRef: 'ABA-REF-99218274',
-    createdAt: '2026-10-23T14:30:00Z',
-    updatedAt: '2026-10-23T15:10:00Z',
-  },
-  {
-    id: 'ord-1002',
-    orderNumber: 'AK-2026-8802',
-    customerId: 'user-c2',
-    customerName: 'Chef Vuthy (Miki House)',
-    customerPhone: '0971234567',
-    customerEmail: 'vuthy.chef@gmail.com',
-    deliveryAddress: 'Preah Monivong Blvd, Boeung Keng Kang 1, Phnom Penh',
-    telegramHandle: '@chef_vuthy',
-    deliveryNotes: 'Urgent for dinner service tonight.',
-    items: [
-      {
-        product: INITIAL_PRODUCTS[2], // Bluefin Otoro
-        quantity: 1,
-      },
-      {
-        product: INITIAL_PRODUCTS[16], // Akuruhi Rice 5kg
-        quantity: 4,
-      },
-      {
-        product: INITIAL_PRODUCTS[10], // Kewpie Mayo
-        quantity: 2,
-      },
-    ],
-    subtotal: 170.00,
-    vat: 0,
-    deliveryFee: 0,
-    total: 170.00,
-    paymentMethod: 'telegram',
-    paymentStatus: 'verification_pending',
-    orderStatus: 'pending_payment',
-    createdAt: '2026-10-23T19:15:00Z',
-    updatedAt: '2026-10-23T19:15:00Z',
-  },
-];
-
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Products State
   const [products, setProducts] = useState<Product[]>(() => {
@@ -268,6 +206,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           setSettings((prev) => ({ ...prev, ...remoteSettings }));
         }
       });
+      fetchOrdersFromSupabase().then((data) => {
+        if (data && data.length > 0) {
+          setOrders(data);
+        }
+      });
 
       // Subscribe to real-time changes so brand color & logo changes show instantly across all screens
       const unsubscribeSettings = subscribeToSettings((remoteSettings) => {
@@ -288,9 +231,24 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
       });
 
+      // Subscribe to real-time order events (new customer purchases, status confirmations, deletions)
+      const unsubscribeOrders = subscribeToOrders(({ event, order, orderId }) => {
+        if (event === 'INSERT' && order) {
+          setOrders((prev) => {
+            if (prev.some((o) => o.id === order.id)) return prev;
+            return [order, ...prev];
+          });
+        } else if (event === 'UPDATE' && order) {
+          setOrders((prev) => prev.map((o) => (o.id === order.id ? order : o)));
+        } else if (event === 'DELETE' && orderId) {
+          setOrders((prev) => prev.filter((o) => o.id !== orderId));
+        }
+      });
+
       return () => {
         unsubscribeSettings();
         unsubscribeUsers();
+        unsubscribeOrders();
       };
     }
   }, []);
@@ -1113,6 +1071,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     setOrders((prev) => [newOrder, ...prev]);
+    if (isSupabaseConfigured()) {
+      saveOrderToSupabase(newOrder);
+    }
 
     // Update customer's total spent & order count
     if (currentUser) {
@@ -1152,25 +1113,41 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         return ord;
       })
     );
+    if (isSupabaseConfigured()) {
+      updateOrderStatusInSupabase(orderId, status, paymentStatus);
+    }
     showToast(`Order status updated to ${status.replace('_', ' ').toUpperCase()}`);
   };
 
   const updateOrderDetails = (orderId: string, updates: Partial<Order>) => {
-    setOrders((prev) =>
-      prev.map((ord) => (ord.id === orderId ? { ...ord, ...updates, updatedAt: new Date().toISOString() } : ord))
-    );
+    setOrders((prev) => {
+      const updatedList = prev.map((ord) =>
+        ord.id === orderId ? { ...ord, ...updates, updatedAt: new Date().toISOString() } : ord
+      );
+      const target = updatedList.find((ord) => ord.id === orderId);
+      if (target && isSupabaseConfigured()) {
+        saveOrderToSupabase(target);
+      }
+      return updatedList;
+    });
     showToast('Order details modified successfully.');
   };
 
   const deleteOrder = (orderId: string) => {
     const target = orders.find((o) => o.id === orderId);
     setOrders((prev) => prev.filter((o) => o.id !== orderId));
+    if (isSupabaseConfigured()) {
+      deleteOrderFromSupabase(orderId);
+    }
     showToast(target ? `Purchase order ${target.orderNumber} deleted successfully.` : 'Purchase order deleted.');
   };
 
   const bulkDeleteOrders = (orderIds: string[]) => {
     if (orderIds.length === 0) return;
     setOrders((prev) => prev.filter((o) => !orderIds.includes(o.id)));
+    if (isSupabaseConfigured()) {
+      bulkDeleteOrdersFromSupabase(orderIds);
+    }
     showToast(`Deleted ${orderIds.length} customer purchase record(s).`);
   };
 

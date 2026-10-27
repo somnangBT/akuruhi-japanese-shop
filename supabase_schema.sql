@@ -137,3 +137,41 @@ DROP POLICY IF EXISTS "Allow public delete to store_settings" ON public.store_se
 CREATE POLICY "Allow public delete to store_settings"
 ON public.store_settings FOR DELETE
 USING (true);
+
+-- ========================================================
+-- 8. CUSTOMER PURCHASES & ORDERS TABLE
+-- ========================================================
+CREATE TABLE IF NOT EXISTS public.orders (
+    id TEXT PRIMARY KEY,
+    order_number TEXT NOT NULL,
+    customer_id TEXT NOT NULL,
+    customer_name TEXT NOT NULL,
+    customer_phone TEXT NOT NULL,
+    customer_email TEXT,
+    delivery_address TEXT NOT NULL,
+    telegram_handle TEXT,
+    delivery_notes TEXT,
+    items JSONB NOT NULL DEFAULT '[]'::jsonb,
+    subtotal NUMERIC NOT NULL DEFAULT 0,
+    vat NUMERIC NOT NULL DEFAULT 0,
+    delivery_fee NUMERIC NOT NULL DEFAULT 0,
+    total NUMERIC NOT NULL DEFAULT 0,
+    payment_method TEXT NOT NULL DEFAULT 'qr_code',
+    payment_status TEXT NOT NULL DEFAULT 'unpaid',
+    order_status TEXT NOT NULL DEFAULT 'pending_payment',
+    payment_slip_url TEXT,
+    transaction_ref TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable Row Level Security (RLS)
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+
+-- Allow complete access for customer purchase placement and admin management
+DROP POLICY IF EXISTS "Allow all access to orders" ON public.orders;
+CREATE POLICY "Allow all access to orders"
+ON public.orders
+FOR ALL
+USING (true)
+WITH CHECK (true);
