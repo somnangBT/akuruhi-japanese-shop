@@ -382,10 +382,14 @@ export const fetchSettingsFromSupabase = async (): Promise<StoreSettings | null>
     }
 
     if (data && data.settings) {
-      return {
+      const merged = {
         ...DEFAULT_STORE_SETTINGS,
         ...(data.settings as Partial<StoreSettings>),
       };
+      if (!merged.heroSlides || merged.heroSlides.length === 0) {
+        merged.heroSlides = DEFAULT_STORE_SETTINGS.heroSlides;
+      }
+      return merged;
     }
 
     // Auto-seed initial store settings if empty
@@ -467,9 +471,14 @@ export const subscribeToSettings = (onUpdate: (settings: StoreSettings) => void)
         { event: '*', schema: 'public', table: 'store_settings', filter: 'id=eq.primary' },
         (payload: any) => {
           if (payload?.new?.settings) {
+            const incoming = payload.new.settings as Partial<StoreSettings>;
             onUpdate({
               ...DEFAULT_STORE_SETTINGS,
-              ...(payload.new.settings as Partial<StoreSettings>),
+              ...incoming,
+              heroSlides:
+                incoming.heroSlides && incoming.heroSlides.length > 0
+                  ? incoming.heroSlides
+                  : DEFAULT_STORE_SETTINGS.heroSlides,
             });
           }
         }

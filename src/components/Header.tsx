@@ -194,6 +194,11 @@ export const Header: React.FC = () => {
                     <User className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                   </div>
                 )}
+                {isAdmin && (
+                  <span className="sm:hidden font-bold text-[10px] text-amber-700 dark:text-amber-300">
+                    Admin
+                  </span>
+                )}
                 <div className="text-left hidden sm:flex flex-col">
                   <span className="font-semibold text-[11px] truncate max-w-[110px]">
                     {currentUser.name}
@@ -329,6 +334,22 @@ export const Header: React.FC = () => {
             )}
           </div>
 
+          {/* Mobile-visible Quick Admin Switch Button */}
+          {isAdmin && (
+            <button
+              onClick={() => setActiveView(activeView === 'admin' ? 'store' : 'admin')}
+              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-xs md:hidden cursor-pointer ${
+                activeView === 'admin'
+                  ? 'bg-rose-50 text-rose-700 border-rose-300 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-500/40'
+                  : 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/40 hover:bg-amber-500/30'
+              }`}
+              title={activeView === 'admin' ? 'Switch to Storefront Catalog' : 'Go to Admin Dashboard'}
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+              <span>{activeView === 'admin' ? 'Store' : 'Admin'}</span>
+            </button>
+          )}
+
           {/* Cart Bag Button (Only visible for customer/guest accounts, removed for admin) */}
           {!isAdmin && (
             <button
@@ -413,11 +434,32 @@ export const Header: React.FC = () => {
                 setActiveView('admin');
                 setIsMobileMenuOpen(false);
               }}
-              className="w-full text-left py-2 text-sm text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 flex items-center gap-2 font-semibold"
+              className="w-full text-left py-2.5 px-3 rounded-xl bg-amber-500/15 dark:bg-amber-500/25 border border-amber-500/35 text-amber-800 dark:text-amber-200 hover:bg-amber-500/20 flex items-center justify-between text-sm font-bold shadow-xs cursor-pointer"
             >
-              <ShieldCheck className="w-4 h-4" />
-              <span>Admin Dashboard</span>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                <span>Admin Management Dashboard</span>
+              </div>
+              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-800 dark:text-amber-200 font-extrabold">
+                Admin
+              </span>
             </button>
+          )}
+
+          {/* Quick Admin sign-in link if not logged in as admin */}
+          {!isAdmin && (
+            <div className="pt-2 border-t border-slate-200 dark:border-neutral-800">
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsAuthModalOpen(true);
+                }}
+                className="w-full text-left py-1.5 text-xs text-amber-700 dark:text-amber-400 hover:underline flex items-center gap-1.5 font-semibold cursor-pointer"
+              >
+                <KeyRound className="w-3.5 h-3.5" />
+                <span>Administrator Sign In (សម្រាប់ Admin គ្រប់គ្រង)</span>
+              </button>
+            </div>
           )}
 
           {/* Mobile Theme Toggle Item */}

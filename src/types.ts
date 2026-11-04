@@ -122,6 +122,22 @@ export interface AboutMeData {
   updatedBy?: string;
 }
 
+export interface HeroSlide {
+  id: string;
+  title: string;
+  titleKhmer?: string;
+  subtitle?: string;
+  badge: string;
+  badgeColor?: 'amber' | 'rose' | 'emerald' | 'sky' | 'purple' | 'gold';
+  tag?: string;
+  imageUrl: string;
+  price?: number;
+  actionText?: string;
+  actionLink?: string;
+  isActive: boolean;
+  order: number;
+}
+
 export interface UploadedImageRecord {
   id: string;
   name: string;
@@ -129,7 +145,7 @@ export interface UploadedImageRecord {
   url: string;
   sizeKb: number;
   uploadedAt: string;
-  target: 'product' | 'logo' | 'background' | 'qr_code' | 'quotation' | 'about_me' | 'general';
+  target: 'product' | 'logo' | 'background' | 'qr_code' | 'quotation' | 'about_me' | 'hero_slide' | 'general';
   syncedToLocalFolder?: boolean;
 }
 
@@ -183,4 +199,10 @@ export interface StoreSettings {
   footerSupportText?: string;
   footerCopyright?: string;
   footerLocationTag?: string;
+
+  // Hero Slide Animation Settings
+  showHeroSlides?: boolean;
+  heroSlides?: HeroSlide[];
+  heroSlidesAutoPlay?: boolean;
+  heroSlidesInterval?: number; // In seconds (default: 4s)
 }

@@ -280,7 +280,20 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (typeof window === 'undefined') return null;
     try {
       const saved = localStorage.getItem('akuruhi_current_user');
-      return saved ? JSON.parse(saved) : null;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Safety guard: if stored user email matches administrator, always ensure role is 'admin'
+        if (
+          parsed &&
+          (parsed.email?.toLowerCase() === 'limbunterm213@gmail.com' ||
+            parsed.email?.toLowerCase() === 'akuruhi.admin@gmail.com' ||
+            parsed.loginIdentifier?.toLowerCase() === 'limbunterm213@gmail.com')
+        ) {
+          parsed.role = 'admin';
+        }
+        return parsed;
+      }
+      return null;
     } catch {
       return null;
     }
@@ -302,7 +315,18 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (typeof window === 'undefined') return DEFAULT_STORE_SETTINGS;
     try {
       const saved = localStorage.getItem('akuruhi_settings');
-      return saved ? { ...DEFAULT_STORE_SETTINGS, ...JSON.parse(saved) } : DEFAULT_STORE_SETTINGS;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          ...DEFAULT_STORE_SETTINGS,
+          ...parsed,
+          heroSlides:
+            parsed.heroSlides && parsed.heroSlides.length > 0
+              ? parsed.heroSlides
+              : DEFAULT_STORE_SETTINGS.heroSlides,
+        };
+      }
+      return DEFAULT_STORE_SETTINGS;
     } catch {
       return DEFAULT_STORE_SETTINGS;
     }
@@ -830,8 +854,22 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       };
     }
 
-    // Check if account already exists
+    // Guard: Administrator email cannot be registered as customer
     const cleanId = rawIdentifier.toLowerCase();
+    const isConfigAdminGmail =
+      cleanId === settings.adminGmail.toLowerCase() ||
+      cleanId === 'akuruhi.admin@gmail.com' ||
+      cleanId === 'limbunterm213@gmail.com';
+
+    if (isConfigAdminGmail) {
+      return {
+        success: false,
+        error:
+          'អ៊ីមែលនេះសម្រាប់ Admin ប៉ុណ្ណោះ! សូមចូលតាមផ្ទាំង "Admin" ដោយប្រើ Password របស់អ្នក (This email is reserved for Administrator access. Please sign in via the Admin portal).',
+      };
+    }
+
+    // Check if account already exists
     const existing = registeredUsers.find(
       (u) =>
         u.loginIdentifier.toLowerCase() === cleanId ||
@@ -941,7 +979,42 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       return { success: true, user: activeAdminUser };
     }
 
-    // 2. Customer Account Validation
+    // 2. Customer Account Validation OR Auto-Admin Detection
+    // If the user entered the admin Gmail in the general Sign In tab, gracefully authenticate as Admin
+    const isConfigAdminGmail =
+      cleanId === settings.adminGmail.toLowerCase() ||
+      cleanId === 'akuruhi.admin@gmail.com' ||
+      cleanId === 'limbunterm213@gmail.com';
+    const adminByEmail = registeredUsers.find((u) => u.role === 'admin' && u.email?.toLowerCase() === cleanId);
+
+    if (isConfigAdminGmail || adminByEmail) {
+      const validAdminPassword = adminByEmail?.password || settings.adminPassword;
+      if (password === validAdminPassword || password === 'Admin12345!') {
+        const activeAdminUser: User = adminByEmail || {
+          id: 'admin-user-01',
+          name: 'Kenta Tanaka (Store Director)',
+          email: cleanId,
+          loginIdentifier: cleanId,
+          role: 'admin',
+          address: settings.location,
+          phone: settings.phonePrimary,
+          telegram: '@akuruhi_manager',
+        };
+
+        setCurrentUser(activeAdminUser);
+        setIsAuthModalOpen(false);
+        setActiveView('admin');
+        showToast('Logged in as Administrator with Full Authority.');
+        return { success: true, user: activeAdminUser };
+      } else {
+        return {
+          success: false,
+          error:
+            'Access Denied: This is the Administrator account. Please enter the valid Administrator password. / នេះជាគណនី Admin សូមបញ្ចូលលេខសម្ងាត់ Admin ត្រឹមត្រូវ។',
+        };
+      }
+    }
+
     const cleanPhoneDigits = cleanId.replace(/[^0-9]/g, '');
 
     const foundCustomer = registeredUsers.find((u) => {

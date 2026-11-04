@@ -1,10 +1,73 @@
-import { Product, StoreSettings } from '../types';
+import { Product, StoreSettings, HeroSlide } from '../types';
 
 export const HERO_BANNER_IMAGE = '/assets/images/hero_japanese_culinary_spread_1792817197445.jpg';
 export const WAGYU_IMAGE = '/assets/images/wagyu_beef_a5_cut_1792817198476.jpg';
 export const SAKE_IMAGE = '/assets/images/sake_dassai_bottle_1792817199693.jpg';
 export const SASHIMI_IMAGE = '/assets/images/fresh_sashimi_seafood_1792817198781.jpg';
 export const SALMON_IMAGE = '/assets/images/salmon_sashimi.jpg';
+
+export const DEFAULT_HERO_SLIDES: HeroSlide[] = [
+  {
+    id: 'slide-1',
+    title: 'A5 Miyazaki Wagyu Ribeye & Sirloin',
+    titleKhmer: 'ឡុកឡាក់ & សាច់គោជប៉ុន A5 កំពូលរសជាតិ',
+    subtitle: 'Supreme Japanese Black Wagyu A5 with snowflake marbling',
+    badge: 'ម្ហូបពិសេសប្រចាំហាង',
+    badgeColor: 'amber',
+    tag: '🔍 ចម្អិនផ្ទាល់ភ្លាមៗ',
+    imageUrl: WAGYU_IMAGE,
+    price: 110,
+    actionText: 'កុម្ម៉ង់ឥឡូវនេះ',
+    actionLink: '#catalog-section',
+    isActive: true,
+    order: 1,
+  },
+  {
+    id: 'slide-2',
+    title: 'Toyosu Bluefin Tuna & Salmon Sashimi',
+    titleKhmer: 'ត្រីសាម៉ុង & សាស៊ីមីស្រស់ធម្មជាតិ',
+    subtitle: 'Air-freighted weekly from Tokyo Toyosu Market directly to Phnom Penh',
+    badge: 'ស្រស់ធម្មជាតិ ១០០%',
+    badgeColor: 'emerald',
+    tag: '❄️ ដឹកជញ្ជូនត្រជាក់ -20°C',
+    imageUrl: SASHIMI_IMAGE,
+    price: 35,
+    actionText: 'មើលផលិតផល',
+    actionLink: '#catalog-section',
+    isActive: true,
+    order: 2,
+  },
+  {
+    id: 'slide-3',
+    title: 'Dassai 23 Junmai Daiginjo Sake',
+    titleKhmer: 'ស្រាសាខេជប៉ុនលំដាប់ផ្កាយ',
+    subtitle: 'Milled to 23% Yamadanishiki rice with delicate fruity aromas',
+    badge: 'រសជាតិលំដាប់ខ្ពស់',
+    badgeColor: 'rose',
+    tag: '🍶 នាំចូលផ្តាច់មុខ',
+    imageUrl: SAKE_IMAGE,
+    price: 95,
+    actionText: 'កុម្ម៉ង់ទិញ',
+    actionLink: '#catalog-section',
+    isActive: true,
+    order: 3,
+  },
+  {
+    id: 'slide-4',
+    title: 'Traditional Japanese Culinary Feast',
+    titleKhmer: 'ឈុតអាហារជប៉ុន និងគ្រឿងផ្សំពិសេស',
+    subtitle: 'Authentic imported sauces, miso, dashi broth, and noodles',
+    badge: 'ការពេញនិយមបំផុត',
+    badgeColor: 'gold',
+    tag: '🥢 រសជាតិដើមជប៉ុន',
+    imageUrl: HERO_BANNER_IMAGE,
+    price: 45,
+    actionText: 'មើលទាំងអស់',
+    actionLink: '#catalog-section',
+    isActive: true,
+    order: 4,
+  },
+];
 
 export const INITIAL_PRODUCTS: Product[] = [
   // --- FROZEN & PREMIUM MEATS & SEAFOOD ---
@@ -835,5 +898,11 @@ export const DEFAULT_STORE_SETTINGS: StoreSettings = {
     'Order online with ABA KHQR payment confirmation or chat with our sales staff directly on Telegram for bulk quotes.',
   footerCopyright: '© 2026 Akuruhi Cambodia Co., Ltd. All rights reserved.',
   footerLocationTag: 'Phnom Penh, Cambodia',
+
+  // Hero Slide Carousel Settings
+  showHeroSlides: true,
+  heroSlides: DEFAULT_HERO_SLIDES,
+  heroSlidesAutoPlay: true,
+  heroSlidesInterval: 4,
 };
 
