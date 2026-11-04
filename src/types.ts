@@ -168,6 +168,8 @@ export interface StoreSettings {
   phoneSecondary: string;
   telegramUsername: string;
   telegramDirectUrl: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
   bankName: string;
   accountName: string;
   accountNumber: string;

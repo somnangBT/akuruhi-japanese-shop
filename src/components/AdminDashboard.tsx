@@ -1832,6 +1832,30 @@ export const AdminDashboard: React.FC = () => {
                 </p>
               </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <div>
+                  <label className="block text-slate-600 dark:text-neutral-400 mb-1 font-medium">Facebook Page URL</label>
+                  <input
+                    type="url"
+                    value={settings.facebookUrl || ''}
+                    onChange={(e) => updateSettings({ facebookUrl: e.target.value })}
+                    placeholder="https://facebook.com/yourpage"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 text-slate-900 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-600 dark:text-neutral-400 mb-1 font-medium">Instagram Profile URL</label>
+                  <input
+                    type="url"
+                    value={settings.instagramUrl || ''}
+                    onChange={(e) => updateSettings({ instagramUrl: e.target.value })}
+                    placeholder="https://instagram.com/yourprofile"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 text-slate-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
               <div className="pt-3 border-t border-slate-100 dark:border-neutral-850 space-y-3">
                 <h3 className="font-semibold text-slate-900 dark:text-white">ABA Bank / KHQR Details</h3>
 

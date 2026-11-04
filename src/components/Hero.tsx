@@ -16,6 +16,9 @@ import {
   Salad,
   Flame,
   Search,
+  Facebook,
+  Instagram,
+  Phone,
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { HERO_BANNER_IMAGE, DEFAULT_HERO_SLIDES } from '../data/initialProducts';
@@ -260,18 +263,7 @@ export const Hero: React.FC = () => {
                 <span>អាហារចំអិនផ្ទាល់ (Cooked Fresh)</span>
               </button>
 
-              {/* Secondary Button: Telegram */}
-              <a
-                href={settings.telegramDirectUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1.5 px-4 py-3 rounded-2xl bg-[#229ED9]/90 hover:bg-[#229ED9] text-white font-semibold text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
-              >
-                <Send className="w-3.5 h-3.5" />
-                <span>Telegram</span>
-              </a>
-
-              {/* Secondary Button: Quotation */}
+              {/* Quotation PDF */}
               <button
                 onClick={() => setIsQuotationModalOpen(true)}
                 className="flex items-center justify-center gap-1.5 px-4 py-3 rounded-2xl bg-white/90 dark:bg-neutral-900/90 hover:bg-white dark:hover:bg-neutral-850 text-slate-800 dark:text-neutral-200 border border-slate-300 dark:border-neutral-700 font-semibold text-xs sm:text-sm transition-colors shadow-xs active:scale-95 cursor-pointer"
@@ -279,6 +271,64 @@ export const Hero: React.FC = () => {
                 <FileText className="w-3.5 h-3.5 text-slate-400" />
                 <span>Quotation PDF</span>
               </button>
+            </motion.div>
+
+            {/* Quick Contact & Socials: Telegram, Facebook, Instagram, Phone Number */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-wrap items-center gap-2 pt-1"
+            >
+              <span className="text-[11px] font-bold text-slate-500 dark:text-neutral-400 uppercase tracking-wider mr-1">
+                Contact:
+              </span>
+
+              {/* 1. Telegram */}
+              <a
+                href={settings.telegramDirectUrl || `https://t.me/${settings.telegramUsername}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#229ED9]/15 hover:bg-[#229ED9]/25 text-[#229ED9] border border-[#229ED9]/40 text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer"
+                title="Chat with us on Telegram"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>Telegram</span>
+              </a>
+
+              {/* 2. Facebook */}
+              <a
+                href={settings.facebookUrl || 'https://facebook.com/akuruhicambodia'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#1877F2]/15 hover:bg-[#1877F2]/25 text-[#1877F2] border border-[#1877F2]/40 text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer"
+                title="Visit our Facebook Page"
+              >
+                <Facebook className="w-3.5 h-3.5" />
+                <span>Facebook</span>
+              </a>
+
+              {/* 3. Instagram */}
+              <a
+                href={settings.instagramUrl || 'https://instagram.com/akuruhicambodia'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 text-pink-600 dark:text-pink-400 border border-pink-500/40 text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer"
+                title="Follow us on Instagram"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+                <span>Instagram</span>
+              </a>
+
+              {/* 4. Phone Number (Call) */}
+              <a
+                href={`tel:${settings.phonePrimary.replace(/[^0-9+]/g, '')}`}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-700 dark:text-emerald-400 border border-emerald-500/40 text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer"
+                title={`Call ${settings.phonePrimary}`}
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>{settings.phonePrimary}</span>
+              </a>
             </motion.div>
 
             {/* Bottom Row on Left: Pause/Play indicator button + Trust Metrics */}

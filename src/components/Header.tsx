@@ -13,6 +13,9 @@ import {
   KeyRound,
   Sun,
   Moon,
+  Facebook,
+  Instagram,
+  Phone,
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
@@ -48,16 +51,46 @@ export const Header: React.FC = () => {
         </div>
         <div className="hidden lg:flex items-center gap-3 text-slate-600 dark:text-neutral-400 text-xs shrink-0">
           <a
-            href={settings.telegramDirectUrl}
+            href={settings.telegramDirectUrl || `https://t.me/${settings.telegramUsername}`}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors flex items-center gap-1"
+            title="Telegram"
           >
             <Send className="w-3 h-3 text-sky-500 dark:text-sky-400" />
             <span>@{settings.telegramUsername}</span>
           </a>
           <span className="text-slate-300 dark:text-neutral-700">·</span>
-          <span>{settings.phonePrimary}</span>
+          <a
+            href={settings.facebookUrl || 'https://facebook.com/akuruhicambodia'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#1877F2] transition-colors flex items-center gap-1"
+            title="Facebook Page"
+          >
+            <Facebook className="w-3 h-3 text-[#1877F2]" />
+            <span>Facebook</span>
+          </a>
+          <span className="text-slate-300 dark:text-neutral-700">·</span>
+          <a
+            href={settings.instagramUrl || 'https://instagram.com/akuruhicambodia'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-pink-500 transition-colors flex items-center gap-1"
+            title="Instagram Profile"
+          >
+            <Instagram className="w-3 h-3 text-pink-500" />
+            <span>Instagram</span>
+          </a>
+          <span className="text-slate-300 dark:text-neutral-700">·</span>
+          <a
+            href={`tel:${settings.phonePrimary.replace(/[^0-9+]/g, '')}`}
+            className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1 font-medium"
+            title={`Call ${settings.phonePrimary}`}
+          >
+            <Phone className="w-3 h-3 text-emerald-500" />
+            <span>{settings.phonePrimary}</span>
+          </a>
         </div>
       </div>
 
@@ -474,6 +507,49 @@ export const Header: React.FC = () => {
             >
               Switch to {theme === 'dark' ? 'Light' : 'Dark'}
             </button>
+          </div>
+
+          {/* Mobile Quick Contacts: Telegram, Facebook, Instagram, Phone */}
+          <div className="pt-2 border-t border-slate-200 dark:border-neutral-800 space-y-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400 block px-0.5">
+              Contact & Social Channels:
+            </span>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <a
+                href={settings.telegramDirectUrl || `https://t.me/${settings.telegramUsername}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 p-2 rounded-xl bg-[#229ED9]/15 text-[#229ED9] border border-[#229ED9]/30 font-semibold"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>Telegram</span>
+              </a>
+              <a
+                href={settings.facebookUrl || 'https://facebook.com/akuruhicambodia'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 p-2 rounded-xl bg-[#1877F2]/15 text-[#1877F2] border border-[#1877F2]/30 font-semibold"
+              >
+                <Facebook className="w-3.5 h-3.5" />
+                <span>Facebook</span>
+              </a>
+              <a
+                href={settings.instagramUrl || 'https://instagram.com/akuruhicambodia'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 p-2 rounded-xl bg-pink-500/15 text-pink-600 dark:text-pink-400 border border-pink-500/30 font-semibold"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+                <span>Instagram</span>
+              </a>
+              <a
+                href={`tel:${settings.phonePrimary.replace(/[^0-9+]/g, '')}`}
+                className="flex items-center gap-1.5 p-2 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>Call Phone</span>
+              </a>
+            </div>
           </div>
         </div>
       )}

@@ -851,6 +851,8 @@ export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   phoneSecondary: '+855 97 337 1216',
   telegramUsername: 'akuruhi_orders',
   telegramDirectUrl: 'https://t.me/akuruhi_orders',
+  facebookUrl: 'https://facebook.com/akuruhicambodia',
+  instagramUrl: 'https://instagram.com/akuruhicambodia',
   bankName: 'ABA Bank (KHQR / Bakong)',
   accountName: 'AKURUHI CAMBODIA CO., LTD',
   accountNumber: '001 889 231 (USD)',

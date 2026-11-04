@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import {
   Send,
   Phone,
+  Facebook,
+  Instagram,
   MapPin,
   FileText,
   ShieldCheck,
@@ -219,24 +221,51 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Payment & Telegram */}
+          {/* Payment & Contacts: Telegram, Facebook, Instagram, Phone */}
           <div className="space-y-3">
             <h3 className="font-semibold text-slate-900 dark:text-white uppercase tracking-wider text-[11px]">
-              {settings.footerSupportTitle || 'Instant Support & Pay'}
+              {settings.footerSupportTitle || 'Instant Support & Contact'}
             </h3>
             <p className="text-xs text-slate-600 dark:text-neutral-400 leading-relaxed">
               {settings.footerSupportText ||
-                'Order online with ABA KHQR payment confirmation or chat with our sales staff directly on Telegram for bulk quotes.'}
+                'Order online with ABA KHQR payment confirmation or chat with our sales staff directly on Telegram, Facebook, or Phone.'}
             </p>
-            <a
-              href={settings.telegramDirectUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#229ED9]/15 hover:bg-[#229ED9]/25 text-[#229ED9] border border-[#229ED9]/30 font-medium transition-colors"
-            >
-              <Send className="w-3.5 h-3.5" />
-              <span>Telegram @{settings.telegramUsername}</span>
-            </a>
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <a
+                href={settings.telegramDirectUrl || `https://t.me/${settings.telegramUsername}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#229ED9]/15 hover:bg-[#229ED9]/25 text-[#229ED9] border border-[#229ED9]/30 font-semibold transition-colors text-xs"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>Telegram</span>
+              </a>
+              <a
+                href={settings.facebookUrl || 'https://facebook.com/akuruhicambodia'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1877F2]/15 hover:bg-[#1877F2]/25 text-[#1877F2] border border-[#1877F2]/30 font-semibold transition-colors text-xs"
+              >
+                <Facebook className="w-3.5 h-3.5" />
+                <span>Facebook</span>
+              </a>
+              <a
+                href={settings.instagramUrl || 'https://instagram.com/akuruhicambodia'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 text-pink-600 dark:text-pink-400 border border-pink-500/30 font-semibold transition-colors text-xs"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+                <span>Instagram</span>
+              </a>
+              <a
+                href={`tel:${settings.phonePrimary.replace(/[^0-9+]/g, '')}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold transition-colors text-xs"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>{settings.phonePrimary}</span>
+              </a>
+            </div>
           </div>
         </div>
 
