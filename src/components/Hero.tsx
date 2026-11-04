@@ -71,17 +71,19 @@ export const Hero: React.FC = () => {
   const activeSlides = slides.length > 0 ? slides : DEFAULT_HERO_SLIDES;
   const showHeroSlides = settings.showHeroSlides ?? true;
   const autoPlay = settings.heroSlidesAutoPlay ?? true;
-  const intervalSeconds = Math.max(2, settings.heroSlidesInterval ?? 4);
+  const intervalSeconds = Math.max(3, settings.heroSlidesInterval ?? 5);
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Auto-slide effect
+  // Auto-slide effect (Smooth & Relaxed pace)
   useEffect(() => {
     if (!autoPlay || isPaused || isHovered || activeSlides.length <= 1) return;
 
     const timer = setInterval(() => {
+      setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % activeSlides.length);
     }, intervalSeconds * 1000);
 
@@ -100,10 +102,8 @@ export const Hero: React.FC = () => {
     const diff = touchStartXRef.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 40) {
       if (diff > 0) {
-        // Swiped left -> next
         handleNext();
       } else {
-        // Swiped right -> prev
         handlePrev();
       }
     }
@@ -111,11 +111,18 @@ export const Hero: React.FC = () => {
   };
 
   const handlePrev = () => {
+    setDirection(-1);
     setCurrentIndex((prev) => (prev - 1 + activeSlides.length) % activeSlides.length);
   };
 
   const handleNext = () => {
+    setDirection(1);
     setCurrentIndex((prev) => (prev + 1) % activeSlides.length);
+  };
+
+  const handleSelectDot = (idx: number) => {
+    setDirection(idx > currentIndex ? 1 : -1);
+    setCurrentIndex(idx);
   };
 
   const scrollToCatalog = () => {
@@ -380,138 +387,138 @@ export const Hero: React.FC = () => {
                 🏮
               </motion.div>
 
-              {/* 3D Stack Container */}
-              <div className="relative w-full max-w-[340px] sm:max-w-[400px] h-[340px] sm:h-[380px] flex items-center justify-center select-none perspective-[1200px]">
-                {activeSlides.map((slide, idx) => {
-                  const total = activeSlides.length;
-                  let offset = (idx - currentIndex) % total;
-                  if (offset > total / 2) offset -= total;
-                  if (offset < -total / 2) offset += total;
+              {/* Single Feature Hero Card Showcase (បង្ហាញតែមួយរូប ចលនារំកិល Slow & Silky Smooth) */}
+              <div className="relative w-full max-w-[340px] sm:max-w-[420px] min-h-[350px] sm:min-h-[390px] flex items-center justify-center select-none overflow-hidden py-1 px-1">
+                <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+                  <motion.div
+                    key={currentSlide.id}
+                    custom={direction}
+                    variants={{
+                      enter: (dir: number) => ({
+                        x: dir > 0 ? 55 : -55,
+                        opacity: 0,
+                        scale: 0.95,
+                        filter: 'blur(3px)',
+                      }),
+                      center: {
+                        x: 0,
+                        opacity: 1,
+                        scale: 1,
+                        filter: 'blur(0px)',
+                        transition: {
+                          duration: 0.95, // Slower, relaxed & ultra-smooth transition
+                          ease: [0.16, 1, 0.3, 1],
+                        },
+                      },
+                      exit: (dir: number) => ({
+                        x: dir > 0 ? -55 : 55,
+                        opacity: 0,
+                        scale: 0.95,
+                        filter: 'blur(3px)',
+                        transition: {
+                          duration: 0.85,
+                          ease: [0.16, 1, 0.3, 1],
+                        },
+                      }),
+                    }}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    onClick={scrollToCatalog}
+                    className="w-full rounded-2xl p-3.5 sm:p-4.5 bg-slate-900/95 dark:bg-[#111420]/95 backdrop-blur-2xl border border-amber-400/80 shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_35px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30 cursor-pointer will-change-transform relative"
+                  >
+                    {/* Active Card: Traditional Gold Corner Brackets ╔ ╝ (ដូចរូបគំរូ) */}
+                    <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-amber-400 rounded-tl-xs pointer-events-none z-20" />
+                    <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-amber-400 rounded-br-xs pointer-events-none z-20" />
 
-                  const isActive = offset === 0;
-                  const isVisible = Math.abs(offset) <= 1;
-
-                  const colorCfg = BADGE_COLOR_MAP[slide.badgeColor || 'amber'] || BADGE_COLOR_MAP.amber;
-
-                  return (
-                    <motion.div
-                      key={slide.id}
-                      onClick={() => {
-                        if (!isActive) setCurrentIndex(idx);
-                        else scrollToCatalog();
-                      }}
-                      initial={false}
-                      animate={{
-                        x: offset === 0 ? 0 : offset > 0 ? 75 : -75,
-                        scale: offset === 0 ? 1 : 0.88,
-                        rotateZ: offset === 0 ? 0 : offset > 0 ? 5 : -5,
-                        rotateY: offset === 0 ? 0 : offset > 0 ? -10 : 10,
-                        zIndex: offset === 0 ? 30 : isVisible ? 15 : 5,
-                        opacity: offset === 0 ? 1 : isVisible ? 0.65 : 0,
-                      }}
-                      transition={{
-                        duration: 0.65,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
-                      style={{
-                        pointerEvents: isVisible ? 'auto' : 'none',
-                        transformStyle: 'preserve-3d',
-                      }}
-                      className={`absolute w-full rounded-2xl p-3 sm:p-4 cursor-pointer will-change-transform ${
-                        isActive
-                          ? 'bg-slate-900/95 dark:bg-[#111420]/95 backdrop-blur-2xl border border-amber-400/80 shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_35px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30'
-                          : 'bg-slate-900/80 dark:bg-[#0c0e18]/80 backdrop-blur-md border border-slate-700/50 hover:opacity-85'
-                      }`}
-                    >
-                      {/* Active Card: Traditional Gold Corner Brackets ╔ ╝ (ដូចរូបគំរូ) */}
-                      {isActive && (
-                        <>
-                          <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-amber-400 rounded-tl-xs pointer-events-none z-20" />
-                          <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-amber-400 rounded-br-xs pointer-events-none z-20" />
-                        </>
-                      )}
-
-                      {/* Top Badge: Warm Gradient Pill */}
-                      <div className="flex items-center justify-end mb-2 relative z-10">
-                        <span
-                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black tracking-wide shadow-md ${colorCfg.bg} ${colorCfg.text} border ${colorCfg.border}`}
-                        >
-                          <Sparkles className="w-3 h-3 shrink-0" />
-                          <span>{slide.badge}</span>
-                        </span>
+                    {/* Top Badge: Warm Gradient Pill & Slide Counter */}
+                    <div className="flex items-center justify-between mb-2.5 relative z-10">
+                      <div className="text-[10px] font-mono text-slate-400 font-semibold px-2 py-0.5 rounded-full bg-slate-800/80 border border-slate-700/60">
+                        {currentIndex + 1} / {activeSlides.length}
                       </div>
 
-                      {/* Food Image Container */}
-                      <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-black/70 border border-slate-800 shadow-inner group">
-                        <img
-                          src={slide.imageUrl}
-                          alt={slide.title}
-                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black tracking-wide shadow-md ${
+                          (BADGE_COLOR_MAP[currentSlide.badgeColor || 'amber'] || BADGE_COLOR_MAP.amber).bg
+                        } ${(BADGE_COLOR_MAP[currentSlide.badgeColor || 'amber'] || BADGE_COLOR_MAP.amber).text} border ${
+                          (BADGE_COLOR_MAP[currentSlide.badgeColor || 'amber'] || BADGE_COLOR_MAP.amber).border
+                        }`}
+                      >
+                        <Sparkles className="w-3 h-3 shrink-0" />
+                        <span>{currentSlide.badge}</span>
+                      </span>
+                    </div>
 
-                        {slide.price && (
-                          <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md border border-amber-400/40 text-amber-300 font-mono font-black text-xs shadow-md">
-                            ${slide.price.toFixed(2)}
-                          </div>
+                    {/* Food Image Container */}
+                    <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-black/70 border border-slate-800 shadow-inner group">
+                      <img
+                        src={currentSlide.imageUrl}
+                        alt={currentSlide.title}
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
+
+                      {currentSlide.price && (
+                        <div className="absolute bottom-2.5 left-2.5 px-2.5 py-1 rounded-lg bg-black/85 backdrop-blur-md border border-amber-400/50 text-amber-300 font-mono font-black text-xs sm:text-sm shadow-md">
+                          ${currentSlide.price.toFixed(2)}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Bottom Info: Title, Khmer text & Quick Tag */}
+                    <div className="mt-3.5 space-y-1 relative z-10">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="font-display font-extrabold text-sm sm:text-base text-white leading-snug truncate">
+                          {currentSlide.titleKhmer || currentSlide.title}
+                        </h3>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs pt-0.5">
+                        {currentSlide.title && currentSlide.titleKhmer ? (
+                          <span className="text-[11px] text-slate-400 truncate max-w-[200px]">
+                            {currentSlide.title}
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-slate-400">
+                            {currentSlide.subtitle || 'Akuruhi Supreme Quality'}
+                          </span>
+                        )}
+
+                        {currentSlide.tag && (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-bold shrink-0">
+                            <Search className="w-2.5 h-2.5" />
+                            <span>{currentSlide.tag}</span>
+                          </span>
                         )}
                       </div>
-
-                      {/* Bottom Info: Title, Khmer text & Quick Tag */}
-                      <div className="mt-3 space-y-1 relative z-10">
-                        <div className="flex items-start justify-between gap-2">
-                          <h3 className="font-display font-extrabold text-sm sm:text-base text-white leading-snug truncate">
-                            {slide.titleKhmer || slide.title}
-                          </h3>
-                        </div>
-
-                        <div className="flex items-center justify-between text-xs pt-0.5">
-                          {slide.title && slide.titleKhmer ? (
-                            <span className="text-[11px] text-slate-400 truncate max-w-[180px]">
-                              {slide.title}
-                            </span>
-                          ) : (
-                            <span className="text-[11px] text-slate-400">
-                              {slide.subtitle || 'Akuruhi Supreme Quality'}
-                            </span>
-                          )}
-
-                          {slide.tag && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-bold shrink-0">
-                              <Search className="w-2.5 h-2.5" />
-                              <span>{slide.tag}</span>
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
               {/* Slide Navigation Buttons & Dot Indicator */}
-              <div className="flex items-center justify-between w-full max-w-[340px] sm:max-w-[400px] mt-4 px-2">
+              <div className="flex items-center justify-between w-full max-w-[340px] sm:max-w-[420px] mt-4 px-2">
                 {/* Prev Button */}
                 <button
                   type="button"
                   onClick={handlePrev}
                   aria-label="Previous slide"
-                  className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700/70 shadow-md backdrop-blur-md active:scale-95 transition-all cursor-pointer"
+                  className="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700/70 shadow-md backdrop-blur-md active:scale-95 transition-all cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
 
                 {/* Dot Indicators */}
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                   {activeSlides.map((_, i) => (
                     <button
                       key={i}
                       type="button"
-                      onClick={() => setCurrentIndex(i)}
+                      onClick={() => handleSelectDot(i)}
                       aria-label={`Go to slide ${i + 1}`}
-                      className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                      className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
                         i === currentIndex
-                          ? 'w-7 bg-gradient-to-r from-amber-400 to-amber-500 shadow-md shadow-amber-500/40'
+                          ? 'w-8 bg-gradient-to-r from-amber-400 to-amber-500 shadow-md shadow-amber-500/40'
                           : 'w-2 bg-slate-400/40 dark:bg-slate-700/60 hover:bg-slate-400'
                       }`}
                     />
@@ -523,7 +530,7 @@ export const Hero: React.FC = () => {
                   type="button"
                   onClick={handleNext}
                   aria-label="Next slide"
-                  className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700/70 shadow-md backdrop-blur-md active:scale-95 transition-all cursor-pointer"
+                  className="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700/70 shadow-md backdrop-blur-md active:scale-95 transition-all cursor-pointer"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>

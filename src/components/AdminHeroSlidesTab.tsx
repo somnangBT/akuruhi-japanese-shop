@@ -62,7 +62,7 @@ export const AdminHeroSlidesTab: React.FC = () => {
 
   const showHeroSlides = settings.showHeroSlides ?? true;
   const autoPlay = settings.heroSlidesAutoPlay ?? true;
-  const intervalSeconds = settings.heroSlidesInterval ?? 4;
+  const intervalSeconds = settings.heroSlidesInterval ?? 5;
 
   // Modal State for adding/editing slide
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,6 +91,15 @@ export const AdminHeroSlidesTab: React.FC = () => {
 
   // Live preview interactive state
   const [previewIndex, setPreviewIndex] = useState(0);
+
+  // Preview auto-play effect
+  React.useEffect(() => {
+    if (!autoPlay || isModalOpen || slides.length <= 1) return;
+    const timer = setInterval(() => {
+      setPreviewIndex((prev) => (prev + 1) % slides.length);
+    }, Math.max(3, intervalSeconds) * 1000);
+    return () => clearInterval(timer);
+  }, [autoPlay, isModalOpen, slides.length, intervalSeconds]);
 
   const openCreateModal = () => {
     setEditingSlideId(null);
@@ -359,12 +368,12 @@ export const AdminHeroSlidesTab: React.FC = () => {
             onChange={(e) => updateSettings({ heroSlidesInterval: Number(e.target.value) })}
             className="bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-800 dark:text-white focus:outline-none focus:border-amber-500 cursor-pointer"
           >
-            <option value={2}>2 វិនាទី (2s Fast)</option>
             <option value={3}>3 វិនាទី (3s)</option>
-            <option value={4}>4 វិនាទី (4s Standard)</option>
-            <option value={5}>5 វិនាទី (5s Relaxed)</option>
-            <option value={6}>6 វិនាទី (6s)</option>
-            <option value={8}>8 វិនាទី (8s Slow)</option>
+            <option value={4}>4 វិនាទី (4s)</option>
+            <option value={5}>5 វិនាទី (5s ស្តង់ដារ Relaxed)</option>
+            <option value={6}>6 វិនាទី (6s យឺតល្មម Slow)</option>
+            <option value={8}>8 វិនាទី (8s យឺតខ្លាំង)</option>
+            <option value={10}>10 វិនាទី (10s យឺតបំផុត)</option>
           </select>
         </div>
       </div>
@@ -522,60 +531,34 @@ export const AdminHeroSlidesTab: React.FC = () => {
             <div className="flex items-center justify-between relative z-10 text-[11px]">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-900/90 border border-amber-500/30 text-amber-300">
                 <Sparkles className="w-3 h-3 text-amber-400" />
-                <span>3D Card Stack Preview</span>
+                <span>Single Slide Showcase Preview</span>
               </div>
               <div className="text-[10px] text-slate-400 font-mono">
-                {autoPlay ? `Auto: ${intervalSeconds}s` : 'Paused'}
+                {autoPlay ? `Auto: ${intervalSeconds}s (Relaxed)` : 'Paused'}
               </div>
             </div>
 
-            {/* 3D Stack Mockup */}
-            <div className="relative h-64 my-auto flex items-center justify-center select-none perspective-[1000px]">
-              {slides.map((s, idx) => {
-                const total = slides.length;
-                let offset = (idx - previewIndex) % total;
-                if (offset > total / 2) offset -= total;
-                if (offset < -total / 2) offset += total;
-
-                const isActive = offset === 0;
-                const isVisible = Math.abs(offset) <= 1;
-
+            {/* Single Card Showcase Mockup */}
+            <div className="relative h-64 my-auto flex items-center justify-center select-none overflow-hidden py-1">
+              {slides[previewIndex] && (() => {
+                const s = slides[previewIndex];
                 const colorCfg = BADGE_COLORS.find((b) => b.id === s.badgeColor) || BADGE_COLORS[0];
-
                 return (
                   <div
                     key={s.id}
-                    onClick={() => setPreviewIndex(idx)}
-                    style={{
-                      transform:
-                        offset === 0
-                          ? 'translateX(0) scale(1) rotate(0deg)'
-                          : offset > 0
-                          ? 'translateX(55px) scale(0.85) rotate(6deg)'
-                          : 'translateX(-55px) scale(0.85) rotate(-6deg)',
-                      zIndex: offset === 0 ? 20 : isVisible ? 10 : 5,
-                      opacity: offset === 0 ? 1 : isVisible ? 0.65 : 0,
-                      pointerEvents: isVisible ? 'auto' : 'none',
-                      transition: 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
-                    }}
-                    className={`absolute w-64 sm:w-72 rounded-2xl p-2.5 bg-[#121520] border cursor-pointer shadow-xl select-none will-change-transform ${
-                      isActive
-                        ? 'border-amber-400/80 shadow-[0_15px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(245,158,11,0.25)]'
-                        : 'border-slate-800'
-                    }`}
+                    className="w-64 sm:w-72 rounded-2xl p-3 bg-[#121520] border border-amber-400/80 shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(245,158,11,0.25)] relative transition-all duration-700 ease-out"
                   >
                     {/* Gold corner brackets for active card */}
-                    {isActive && (
-                      <>
-                        <div className="absolute top-1.5 left-1.5 w-3 h-3 border-t-2 border-l-2 border-amber-400 rounded-tl-xs pointer-events-none" />
-                        <div className="absolute bottom-1.5 right-1.5 w-3 h-3 border-b-2 border-r-2 border-amber-400 rounded-br-xs pointer-events-none" />
-                      </>
-                    )}
+                    <div className="absolute top-1.5 left-1.5 w-3 h-3 border-t-2 border-l-2 border-amber-400 rounded-tl-xs pointer-events-none" />
+                    <div className="absolute bottom-1.5 right-1.5 w-3 h-3 border-b-2 border-r-2 border-amber-400 rounded-br-xs pointer-events-none" />
 
-                    {/* Card Top Badge */}
-                    <div className="flex justify-end mb-1.5">
+                    {/* Card Top Badge & Counter */}
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[9px] font-mono text-slate-400 font-semibold px-2 py-0.5 rounded-full bg-slate-800/80">
+                        {previewIndex + 1} / {slides.length}
+                      </span>
                       <span
-                        className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full ${colorCfg.bg} ${colorCfg.text} shadow-xs`}
+                        className={`text-[9px] font-extrabold px-2.5 py-0.5 rounded-full ${colorCfg.bg} ${colorCfg.text} shadow-xs`}
                       >
                         {s.badge}
                       </span>
@@ -598,7 +581,7 @@ export const AdminHeroSlidesTab: React.FC = () => {
                     </div>
                   </div>
                 );
-              })}
+              })()}
             </div>
 
             {/* Navigation Dots & Arrow Controls */}
