@@ -165,11 +165,11 @@ export const Hero: React.FC = () => {
 
       {/* Main Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-center">
           {/* ========================================================= */}
           {/* LEFT COLUMN: Headings, Khmer text, buttons, controls     */}
           {/* ========================================================= */}
-          <div className="lg:col-span-7 xl:col-span-7 space-y-4 sm:space-y-5">
+          <div className="lg:col-span-5 xl:col-span-5 space-y-4 sm:space-y-5">
             {/* Top Festive Khmer Ribbon / Announcement */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -190,10 +190,10 @@ export const Hero: React.FC = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.05 }}
-                className="font-display font-black text-2xl sm:text-4xl text-slate-900 dark:text-white tracking-tight flex items-baseline gap-2"
+                className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-slate-900 dark:text-white tracking-tight flex items-baseline gap-2"
               >
                 <span>{settings.storeName.split(' ')[0] || 'Akuruhi'}</span>
-                <span className="text-rose-600 dark:text-rose-500 text-xl sm:text-3xl font-extrabold">
+                <span className="text-rose-600 dark:text-rose-500 text-xl sm:text-2xl lg:text-3xl font-extrabold">
                   Japanese Supply
                 </span>
               </motion.div>
@@ -202,7 +202,7 @@ export const Hero: React.FC = () => {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="font-display text-2xl sm:text-4xl lg:text-[42px] font-black text-slate-900 dark:text-white tracking-tight leading-[1.2] mt-1 text-balance"
+                className="font-display text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.2] mt-1 text-balance"
               >
                 {settings.heroTitle || 'ម្ហូបជប៉ុនលំដាប់កំពូល & គ្រឿងផ្សំស្រស់ធម្មជាតិ'}
               </motion.h1>
@@ -213,7 +213,7 @@ export const Hero: React.FC = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.15 }}
-              className="text-xs sm:text-sm md:text-base text-slate-700 dark:text-neutral-300 leading-relaxed max-w-2xl"
+              className="text-xs sm:text-sm text-slate-700 dark:text-neutral-300 leading-relaxed max-w-xl"
             >
               {settings.heroSubtitle ||
                 'រីករាយជាមួយមុខម្ហូបជប៉ុនរសជាតិដើម សាច់គោ Wagyu A5 ត្រីសាម៉ុងស្រស់ Toyosu Sashimi និងគ្រឿងទេសជប៉ុន ១០០% សម្រាប់គ្រួសារ និងភោជនីយដ្ឋាន ដឹកជញ្ជូនរហ័សទាន់ចិត្តដល់គេហដ្ឋាន!'}
@@ -224,7 +224,7 @@ export const Hero: React.FC = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex items-center gap-3 py-1 text-amber-500/70"
+              className="flex items-center gap-3 py-1 text-amber-500/70 max-w-lg"
             >
               <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-amber-400/50 to-amber-500/80" />
               <div className="flex items-center gap-1 text-xs">
@@ -306,7 +306,7 @@ export const Hero: React.FC = () => {
               )}
 
               {/* Trust Metric Badges underneath (ដូចរូបគំរូ: ១០០% | ១៥-២៥ នាទី | ៤.៨★) */}
-              <div className="flex items-center gap-4 text-xs font-medium text-slate-600 dark:text-neutral-300">
+              <div className="flex items-center gap-3.5 text-xs font-medium text-slate-600 dark:text-neutral-300">
                 <div className="flex items-center gap-1.5">
                   <span className="font-extrabold text-emerald-600 dark:text-emerald-400 text-sm">១០០%</span>
                   <span className="text-[11px] text-slate-500 dark:text-neutral-400">គុណភាពជប៉ុន</span>
@@ -326,18 +326,18 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* ========================================================= */}
-          {/* RIGHT COLUMN: 3D Stacked Card Animation Carousel          */}
+          {/* RIGHT COLUMN: Expansive 1080 HD Hero Slide Showcase      */}
           {/* ========================================================= */}
           {showHeroSlides && (
             <div
-              className="lg:col-span-5 xl:col-span-5 relative flex flex-col items-center justify-center pt-4 lg:pt-0"
+              className="lg:col-span-7 xl:col-span-7 relative flex flex-col items-center justify-center pt-4 lg:pt-0"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
             >
               {/* Decorative Ambient Background Halo */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 sm:w-96 h-72 sm:h-96 bg-gradient-to-tr from-amber-500/20 via-rose-500/15 to-transparent rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 sm:w-[500px] h-80 sm:h-[500px] bg-gradient-to-tr from-amber-500/20 via-rose-500/15 to-transparent rounded-full blur-3xl pointer-events-none" />
 
               {/* Floating Decorative Badges (ដូចរូបគំរូ) */}
               {/* 1. Floating Cherry Blossom (🌸) Badge on Left */}
@@ -351,7 +351,7 @@ export const Hero: React.FC = () => {
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
-                className="absolute -bottom-3 -left-3 sm:-left-5 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-pink-500/20 dark:bg-pink-950/70 border border-pink-400/50 backdrop-blur-md flex items-center justify-center text-xl sm:text-2xl shadow-xl shadow-pink-950/20 pointer-events-none"
+                className="absolute -bottom-3 -left-3 sm:-left-5 z-40 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-pink-500/20 dark:bg-pink-950/70 border border-pink-400/50 backdrop-blur-md flex items-center justify-center text-2xl sm:text-3xl shadow-xl shadow-pink-950/20 pointer-events-none"
               >
                 🌸
               </motion.div>
@@ -367,7 +367,7 @@ export const Hero: React.FC = () => {
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
-                className="absolute top-1/2 -right-3 sm:-right-5 -translate-y-1/2 z-40 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-amber-500/25 dark:bg-amber-950/70 border border-amber-400/60 backdrop-blur-md flex items-center justify-center text-lg sm:text-xl shadow-xl shadow-amber-950/30 pointer-events-none"
+                className="absolute top-1/2 -right-3 sm:-right-5 -translate-y-1/2 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-amber-500/25 dark:bg-amber-950/70 border border-amber-400/60 backdrop-blur-md flex items-center justify-center text-xl sm:text-2xl shadow-xl shadow-amber-950/30 pointer-events-none"
               >
                 ✨
               </motion.div>
@@ -382,20 +382,20 @@ export const Hero: React.FC = () => {
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
-                className="absolute -top-3 right-8 sm:right-12 z-40 w-9 h-9 rounded-full bg-rose-500/20 dark:bg-rose-950/70 border border-rose-400/50 backdrop-blur-md flex items-center justify-center text-base sm:text-lg shadow-xl pointer-events-none"
+                className="absolute -top-3 right-8 sm:right-14 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-rose-500/20 dark:bg-rose-950/70 border border-rose-400/50 backdrop-blur-md flex items-center justify-center text-lg sm:text-xl shadow-xl pointer-events-none"
               >
                 🏮
               </motion.div>
 
-              {/* Single Feature Hero Card Showcase (បង្ហាញតែមួយរូប ចលនារំកិល Slow & Silky Smooth) */}
-              <div className="relative w-full max-w-[340px] sm:max-w-[420px] min-h-[350px] sm:min-h-[390px] flex items-center justify-center select-none overflow-hidden py-1 px-1">
+              {/* Single Feature 1080 HD Hero Card Showcase */}
+              <div className="relative w-full max-w-[480px] sm:max-w-[580px] lg:max-w-[620px] xl:max-w-[660px] min-h-[380px] sm:min-h-[440px] flex items-center justify-center select-none overflow-hidden py-1 px-1">
                 <AnimatePresence mode="popLayout" custom={direction} initial={false}>
                   <motion.div
                     key={currentSlide.id}
                     custom={direction}
                     variants={{
                       enter: (dir: number) => ({
-                        x: dir > 0 ? 55 : -55,
+                        x: dir > 0 ? 65 : -65,
                         opacity: 0,
                         scale: 0.95,
                         filter: 'blur(3px)',
@@ -406,12 +406,12 @@ export const Hero: React.FC = () => {
                         scale: 1,
                         filter: 'blur(0px)',
                         transition: {
-                          duration: 0.95, // Slower, relaxed & ultra-smooth transition
+                          duration: 0.95,
                           ease: [0.16, 1, 0.3, 1],
                         },
                       },
                       exit: (dir: number) => ({
-                        x: dir > 0 ? -55 : 55,
+                        x: dir > 0 ? -65 : 65,
                         opacity: 0,
                         scale: 0.95,
                         filter: 'blur(3px)',
@@ -425,68 +425,68 @@ export const Hero: React.FC = () => {
                     animate="center"
                     exit="exit"
                     onClick={scrollToCatalog}
-                    className="w-full rounded-2xl p-3.5 sm:p-4.5 bg-slate-900/95 dark:bg-[#111420]/95 backdrop-blur-2xl border border-amber-400/80 shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_35px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30 cursor-pointer will-change-transform relative"
+                    className="w-full rounded-2xl sm:rounded-3xl p-4 sm:p-5 bg-slate-900/95 dark:bg-[#111420]/95 backdrop-blur-2xl border border-amber-400/80 shadow-[0_30px_60px_rgba(0,0,0,0.85),0_0_40px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30 cursor-pointer will-change-transform relative"
                   >
                     {/* Active Card: Traditional Gold Corner Brackets ╔ ╝ (ដូចរូបគំរូ) */}
-                    <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-amber-400 rounded-tl-xs pointer-events-none z-20" />
-                    <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-amber-400 rounded-br-xs pointer-events-none z-20" />
+                    <div className="absolute top-2.5 left-2.5 w-5 h-5 border-t-2 border-l-2 border-amber-400 rounded-tl-xs pointer-events-none z-20" />
+                    <div className="absolute bottom-2.5 right-2.5 w-5 h-5 border-b-2 border-r-2 border-amber-400 rounded-br-xs pointer-events-none z-20" />
 
                     {/* Top Badge: Warm Gradient Pill & Slide Counter */}
-                    <div className="flex items-center justify-between mb-2.5 relative z-10">
-                      <div className="text-[10px] font-mono text-slate-400 font-semibold px-2 py-0.5 rounded-full bg-slate-800/80 border border-slate-700/60">
+                    <div className="flex items-center justify-between mb-3 relative z-10">
+                      <div className="text-[11px] font-mono text-slate-300 font-bold px-2.5 py-1 rounded-full bg-slate-800/90 border border-slate-700/80">
                         {currentIndex + 1} / {activeSlides.length}
                       </div>
 
                       <span
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black tracking-wide shadow-md ${
+                        className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs sm:text-sm font-black tracking-wide shadow-md ${
                           (BADGE_COLOR_MAP[currentSlide.badgeColor || 'amber'] || BADGE_COLOR_MAP.amber).bg
                         } ${(BADGE_COLOR_MAP[currentSlide.badgeColor || 'amber'] || BADGE_COLOR_MAP.amber).text} border ${
                           (BADGE_COLOR_MAP[currentSlide.badgeColor || 'amber'] || BADGE_COLOR_MAP.amber).border
                         }`}
                       >
-                        <Sparkles className="w-3 h-3 shrink-0" />
+                        <Sparkles className="w-3.5 h-3.5 shrink-0" />
                         <span>{currentSlide.badge}</span>
                       </span>
                     </div>
 
-                    {/* Food Image Container */}
-                    <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-black/70 border border-slate-800 shadow-inner group">
+                    {/* 1080 HD Widescreen (16:9) Food Image Container */}
+                    <div className="relative aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black/80 border border-slate-800 shadow-2xl group">
                       <img
                         src={currentSlide.imageUrl}
                         alt={currentSlide.title}
                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent opacity-80" />
 
                       {currentSlide.price && (
-                        <div className="absolute bottom-2.5 left-2.5 px-2.5 py-1 rounded-lg bg-black/85 backdrop-blur-md border border-amber-400/50 text-amber-300 font-mono font-black text-xs sm:text-sm shadow-md">
+                        <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-xl bg-black/85 backdrop-blur-md border border-amber-400/60 text-amber-300 font-mono font-black text-sm sm:text-base shadow-xl">
                           ${currentSlide.price.toFixed(2)}
                         </div>
                       )}
                     </div>
 
                     {/* Bottom Info: Title, Khmer text & Quick Tag */}
-                    <div className="mt-3.5 space-y-1 relative z-10">
-                      <div className="flex items-start justify-between gap-2">
-                        <h3 className="font-display font-extrabold text-sm sm:text-base text-white leading-snug truncate">
+                    <div className="mt-4 space-y-1.5 relative z-10">
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="font-display font-black text-base sm:text-xl lg:text-2xl text-white leading-snug truncate">
                           {currentSlide.titleKhmer || currentSlide.title}
                         </h3>
                       </div>
 
-                      <div className="flex items-center justify-between text-xs pt-0.5">
+                      <div className="flex items-center justify-between text-xs sm:text-sm pt-0.5">
                         {currentSlide.title && currentSlide.titleKhmer ? (
-                          <span className="text-[11px] text-slate-400 truncate max-w-[200px]">
+                          <span className="text-xs sm:text-sm text-slate-300 truncate max-w-[280px]">
                             {currentSlide.title}
                           </span>
                         ) : (
-                          <span className="text-[11px] text-slate-400">
+                          <span className="text-xs sm:text-sm text-slate-300">
                             {currentSlide.subtitle || 'Akuruhi Supreme Quality'}
                           </span>
                         )}
 
                         {currentSlide.tag && (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-bold shrink-0">
-                            <Search className="w-2.5 h-2.5" />
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[11px] sm:text-xs font-bold shrink-0">
+                            <Search className="w-3 h-3" />
                             <span>{currentSlide.tag}</span>
                           </span>
                         )}
@@ -497,15 +497,15 @@ export const Hero: React.FC = () => {
               </div>
 
               {/* Slide Navigation Buttons & Dot Indicator */}
-              <div className="flex items-center justify-between w-full max-w-[340px] sm:max-w-[420px] mt-4 px-2">
+              <div className="flex items-center justify-between w-full max-w-[480px] sm:max-w-[580px] lg:max-w-[620px] xl:max-w-[660px] mt-4 px-2">
                 {/* Prev Button */}
                 <button
                   type="button"
                   onClick={handlePrev}
                   aria-label="Previous slide"
-                  className="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700/70 shadow-md backdrop-blur-md active:scale-95 transition-all cursor-pointer"
+                  className="p-3 rounded-2xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700/70 shadow-md backdrop-blur-md active:scale-95 transition-all cursor-pointer"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-5 h-5" />
                 </button>
 
                 {/* Dot Indicators */}
@@ -516,10 +516,10 @@ export const Hero: React.FC = () => {
                       type="button"
                       onClick={() => handleSelectDot(i)}
                       aria-label={`Go to slide ${i + 1}`}
-                      className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
+                      className={`h-2.5 rounded-full transition-all duration-500 cursor-pointer ${
                         i === currentIndex
-                          ? 'w-8 bg-gradient-to-r from-amber-400 to-amber-500 shadow-md shadow-amber-500/40'
-                          : 'w-2 bg-slate-400/40 dark:bg-slate-700/60 hover:bg-slate-400'
+                          ? 'w-10 bg-gradient-to-r from-amber-400 to-amber-500 shadow-md shadow-amber-500/40'
+                          : 'w-2.5 bg-slate-400/40 dark:bg-slate-700/60 hover:bg-slate-400'
                       }`}
                     />
                   ))}
@@ -530,9 +530,9 @@ export const Hero: React.FC = () => {
                   type="button"
                   onClick={handleNext}
                   aria-label="Next slide"
-                  className="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700/70 shadow-md backdrop-blur-md active:scale-95 transition-all cursor-pointer"
+                  className="p-3 rounded-2xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700/70 shadow-md backdrop-blur-md active:scale-95 transition-all cursor-pointer"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
             </div>

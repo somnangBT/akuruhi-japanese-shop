@@ -564,8 +564,8 @@ export const AdminHeroSlidesTab: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* Image */}
-                    <div className="aspect-[16/10] w-full rounded-xl overflow-hidden bg-black/60 relative">
+                    {/* Image (16:9 Widescreen HD) */}
+                    <div className="aspect-[16/9] w-full rounded-xl overflow-hidden bg-black/60 relative">
                       <img src={s.imageUrl} alt={s.title} className="w-full h-full object-cover" />
                     </div>
 
