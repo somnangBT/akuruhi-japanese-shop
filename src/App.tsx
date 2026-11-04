@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { Header } from './components/Header';
@@ -26,6 +26,11 @@ import { ShieldAlert } from 'lucide-react';
 
 const AppContent: React.FC = () => {
   const { activeView, setActiveView, toast, settings, currentUser, setIsAuthModalOpen, theme } = useStore();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const isFullStoreBg = settings.backgroundScope === 'entire_store' && settings.backgroundImageUrl;
 
@@ -33,6 +38,14 @@ const AppContent: React.FC = () => {
     '--brand-color': settings.brandColor || '#e11d48',
     '--brand-color-hover': settings.brandColorHover || '#f43f5e',
   } as React.CSSProperties;
+
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#0b0d10]">
+        <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   // Enforce mandatory user registration or login before accessing the website
   if (!currentUser) {

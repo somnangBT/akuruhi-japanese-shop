@@ -301,7 +301,7 @@ export const AdminHeroSlidesTab: React.FC = () => {
       </div>
 
       {/* Global Slider Behavior Controls Card */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs">
         {/* Toggle 1: Show / Hide on Homepage */}
         <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-neutral-950/80 border border-slate-200 dark:border-neutral-800">
           <div>
@@ -309,7 +309,7 @@ export const AdminHeroSlidesTab: React.FC = () => {
               បង្ហាញ Hero Slide នៅទំព័រដើម
             </div>
             <div className="text-[11px] text-slate-500 dark:text-neutral-400">
-              Enable / Disable 3D Card Carousel
+              Enable / Disable Carousel
             </div>
           </div>
           <button
@@ -331,10 +331,10 @@ export const AdminHeroSlidesTab: React.FC = () => {
         <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-neutral-950/80 border border-slate-200 dark:border-neutral-800">
           <div>
             <div className="font-semibold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
-              <span>រំកិលស្លាយស្វ័យប្រវត្តិ (Auto-Play)</span>
+              <span>រំកិលស្វ័យប្រវត្តិ (Auto-Play)</span>
             </div>
             <div className="text-[11px] text-slate-500 dark:text-neutral-400">
-              Automatically advance slides
+              Auto advance slides
             </div>
           </div>
           <button
@@ -357,23 +357,44 @@ export const AdminHeroSlidesTab: React.FC = () => {
           <div>
             <div className="font-semibold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-amber-500" />
-              <span>ល្បឿនផ្លាស់ប្ដូរ (Speed)</span>
+              <span>ល្បឿន (Speed)</span>
             </div>
             <div className="text-[11px] text-slate-500 dark:text-neutral-400">
-              Slide interval duration
+              Slide interval
             </div>
           </div>
           <select
             value={intervalSeconds}
             onChange={(e) => updateSettings({ heroSlidesInterval: Number(e.target.value) })}
-            className="bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-800 dark:text-white focus:outline-none focus:border-amber-500 cursor-pointer"
+            className="bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-lg px-2 py-1 text-xs font-semibold text-slate-800 dark:text-white focus:outline-none focus:border-amber-500 cursor-pointer"
           >
-            <option value={3}>3 វិនាទី (3s)</option>
-            <option value={4}>4 វិនាទី (4s)</option>
-            <option value={5}>5 វិនាទី (5s ស្តង់ដារ Relaxed)</option>
-            <option value={6}>6 វិនាទី (6s យឺតល្មម Slow)</option>
-            <option value={8}>8 វិនាទី (8s យឺតខ្លាំង)</option>
-            <option value={10}>10 វិនាទី (10s យឺតបំផុត)</option>
+            <option value={3}>3s</option>
+            <option value={4}>4s</option>
+            <option value={5}>5s (ស្តង់ដារ)</option>
+            <option value={6}>6s (យឺតល្មម)</option>
+            <option value={8}>8s</option>
+            <option value={10}>10s</option>
+          </select>
+        </div>
+
+        {/* Presentation Layout Mode */}
+        <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-neutral-950/80 border border-slate-200 dark:border-neutral-800">
+          <div>
+            <div className="font-semibold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5 text-cyan-500" />
+              <span>ទម្រង់ប្លង់ (Layout)</span>
+            </div>
+            <div className="text-[11px] text-slate-500 dark:text-neutral-400">
+              3D Cards or Single 1080
+            </div>
+          </div>
+          <select
+            value={settings.heroSlideLayout || '3d_cards'}
+            onChange={(e) => updateSettings({ heroSlideLayout: e.target.value as '3d_cards' | 'single_wide' })}
+            className="bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-lg px-2 py-1 text-xs font-semibold text-slate-800 dark:text-white focus:outline-none focus:border-amber-500 cursor-pointer"
+          >
+            <option value="3d_cards">🎴 3D កាត ៣ (ដូចរូប)</option>
+            <option value="single_wide">📺 កាតទោល 1080 HD</option>
           </select>
         </div>
       </div>

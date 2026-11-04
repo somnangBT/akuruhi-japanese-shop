@@ -207,4 +207,5 @@ export interface StoreSettings {
   heroSlides?: HeroSlide[];
   heroSlidesAutoPlay?: boolean;
   heroSlidesInterval?: number; // In seconds (default: 4s)
+  heroSlideLayout?: '3d_cards' | 'single_wide'; // '3d_cards' (3 cards 3D) or 'single_wide' (1 card 1080 HD)
 }
