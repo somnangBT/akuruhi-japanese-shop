@@ -384,12 +384,12 @@ export const Hero: React.FC = () => {
               <div className="relative w-full max-w-[340px] sm:max-w-[400px] h-[340px] sm:h-[380px] flex items-center justify-center select-none perspective-[1200px]">
                 {activeSlides.map((slide, idx) => {
                   const total = activeSlides.length;
-                  const diff = (idx - currentIndex + total) % total;
-                  const isActive = diff === 0;
-                  const isNext = diff === 1 || (diff === total - 1 && total === 2);
-                  const isPrev = diff === total - 1 && total > 2;
+                  let offset = (idx - currentIndex) % total;
+                  if (offset > total / 2) offset -= total;
+                  if (offset < -total / 2) offset += total;
 
-                  if (!isActive && !isNext && !isPrev) return null;
+                  const isActive = offset === 0;
+                  const isVisible = Math.abs(offset) <= 1;
 
                   const colorCfg = BADGE_COLOR_MAP[slide.badgeColor || 'amber'] || BADGE_COLOR_MAP.amber;
 
@@ -402,18 +402,22 @@ export const Hero: React.FC = () => {
                       }}
                       initial={false}
                       animate={{
-                        x: isActive ? 0 : isNext ? 65 : -65,
-                        scale: isActive ? 1.02 : 0.88,
-                        rotate: isActive ? 0 : isNext ? 6 : -6,
-                        zIndex: isActive ? 30 : 10,
-                        opacity: isActive ? 1 : 0.65,
+                        x: offset === 0 ? 0 : offset > 0 ? 75 : -75,
+                        scale: offset === 0 ? 1 : 0.88,
+                        rotateZ: offset === 0 ? 0 : offset > 0 ? 5 : -5,
+                        rotateY: offset === 0 ? 0 : offset > 0 ? -10 : 10,
+                        zIndex: offset === 0 ? 30 : isVisible ? 15 : 5,
+                        opacity: offset === 0 ? 1 : isVisible ? 0.65 : 0,
                       }}
                       transition={{
-                        type: 'spring',
-                        stiffness: 280,
-                        damping: 26,
+                        duration: 0.65,
+                        ease: [0.16, 1, 0.3, 1],
                       }}
-                      className={`absolute w-full rounded-2xl p-3 sm:p-4 transition-all duration-300 cursor-pointer ${
+                      style={{
+                        pointerEvents: isVisible ? 'auto' : 'none',
+                        transformStyle: 'preserve-3d',
+                      }}
+                      className={`absolute w-full rounded-2xl p-3 sm:p-4 cursor-pointer will-change-transform ${
                         isActive
                           ? 'bg-slate-900/95 dark:bg-[#111420]/95 backdrop-blur-2xl border border-amber-400/80 shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_35px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30'
                           : 'bg-slate-900/80 dark:bg-[#0c0e18]/80 backdrop-blur-md border border-slate-700/50 hover:opacity-85'

@@ -530,15 +530,15 @@ export const AdminHeroSlidesTab: React.FC = () => {
             </div>
 
             {/* 3D Stack Mockup */}
-            <div className="relative h-64 my-auto flex items-center justify-center">
+            <div className="relative h-64 my-auto flex items-center justify-center select-none perspective-[1000px]">
               {slides.map((s, idx) => {
                 const total = slides.length;
-                const diff = (idx - previewIndex + total) % total;
-                const isActive = diff === 0;
-                const isNext = diff === 1 || (diff === total - 1 && total === 2);
-                const isPrev = diff === total - 1 && total > 2;
+                let offset = (idx - previewIndex) % total;
+                if (offset > total / 2) offset -= total;
+                if (offset < -total / 2) offset += total;
 
-                if (!isActive && !isNext && !isPrev) return null;
+                const isActive = offset === 0;
+                const isVisible = Math.abs(offset) <= 1;
 
                 const colorCfg = BADGE_COLORS.find((b) => b.id === s.badgeColor) || BADGE_COLORS[0];
 
@@ -547,15 +547,18 @@ export const AdminHeroSlidesTab: React.FC = () => {
                     key={s.id}
                     onClick={() => setPreviewIndex(idx)}
                     style={{
-                      transform: isActive
-                        ? 'translateX(0) scale(1) rotate(0deg)'
-                        : isNext
-                        ? 'translateX(55px) scale(0.85) rotate(6deg)'
-                        : 'translateX(-55px) scale(0.85) rotate(-6deg)',
-                      zIndex: isActive ? 20 : 10,
-                      opacity: isActive ? 1 : 0.65,
+                      transform:
+                        offset === 0
+                          ? 'translateX(0) scale(1) rotate(0deg)'
+                          : offset > 0
+                          ? 'translateX(55px) scale(0.85) rotate(6deg)'
+                          : 'translateX(-55px) scale(0.85) rotate(-6deg)',
+                      zIndex: offset === 0 ? 20 : isVisible ? 10 : 5,
+                      opacity: offset === 0 ? 1 : isVisible ? 0.65 : 0,
+                      pointerEvents: isVisible ? 'auto' : 'none',
+                      transition: 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
-                    className={`absolute w-64 sm:w-72 rounded-2xl p-2.5 bg-[#121520] border transition-all duration-500 cursor-pointer shadow-xl select-none ${
+                    className={`absolute w-64 sm:w-72 rounded-2xl p-2.5 bg-[#121520] border cursor-pointer shadow-xl select-none will-change-transform ${
                       isActive
                         ? 'border-amber-400/80 shadow-[0_15px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(245,158,11,0.25)]'
                         : 'border-slate-800'
