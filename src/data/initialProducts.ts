@@ -902,7 +902,7 @@ export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   footerLocationTag: 'Phnom Penh, Cambodia',
 
   // Hero Slide Carousel Settings
-  showHeroSlides: true,
+  showHeroSlides: false,
   heroSlides: DEFAULT_HERO_SLIDES,
   heroSlidesAutoPlay: true,
   heroSlidesInterval: 5,

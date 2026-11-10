@@ -334,6 +334,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         return {
           ...DEFAULT_STORE_SETTINGS,
           ...parsed,
+          showHeroSlides: false,
           storeName: isDeliciousStoreName ? DEFAULT_STORE_SETTINGS.storeName : parsed.storeName,
           heroTitle: isNewYearTitle ? DEFAULT_STORE_SETTINGS.heroTitle : parsed.heroTitle,
           heroSubtitle: isNewYearSubtitle ? DEFAULT_STORE_SETTINGS.heroSubtitle : parsed.heroSubtitle,
