@@ -353,7 +353,21 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (typeof window === 'undefined') return [];
     try {
       const saved = localStorage.getItem('akuruhi_uploaded_images');
-      return saved ? JSON.parse(saved) : [];
+      if (saved) {
+        const parsed: UploadedImageRecord[] = JSON.parse(saved);
+        // Automatically delete any New Year images or hero slide images from admin library
+        return parsed.filter(
+          (img) =>
+            !img.name?.toLowerCase().includes('ចូលឆ្នាំ') &&
+            !img.filename?.toLowerCase().includes('ចូលឆ្នាំ') &&
+            !img.name?.toLowerCase().includes('newyear') &&
+            !img.filename?.toLowerCase().includes('newyear') &&
+            !img.name?.toLowerCase().includes('delicious') &&
+            !img.filename?.toLowerCase().includes('delicious') &&
+            img.target !== 'hero_slide'
+        );
+      }
+      return [];
     } catch {
       return [];
     }

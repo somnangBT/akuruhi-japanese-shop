@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   PackagePlus,
   ShoppingBag,
@@ -239,6 +239,13 @@ export const AdminDashboard: React.FC = () => {
   // Order & Review Deletion confirmation modals
   const [orderToDelete, setOrderToDelete] = useState<Order | null>(null);
   const [reviewToDelete, setReviewToDelete] = useState<Review | null>(null);
+
+  // Automatically switch tab away from slides if hero slides are disabled
+  useEffect(() => {
+    if (!settings.showHeroSlides && activeTab === 'slides') {
+      setActiveTab('products');
+    }
+  }, [settings.showHeroSlides, activeTab]);
 
   // Form State
   const [formData, setFormData] = useState<{
@@ -514,17 +521,19 @@ export const AdminDashboard: React.FC = () => {
           <span>Image Folder Sync</span>
         </button>
 
-        <button
-          onClick={() => setActiveTab('slides')}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
-            activeTab === 'slides'
-              ? 'border-amber-500 text-amber-600 dark:text-amber-300 font-bold'
-              : 'border-transparent text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white'
-          }`}
-        >
-          <Sparkles className="w-4 h-4 text-amber-500" />
-          <span>Hero Slides 3D ({settings.heroSlides?.length ?? 4})</span>
-        </button>
+        {settings.showHeroSlides && (
+          <button
+            onClick={() => setActiveTab('slides')}
+            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
+              activeTab === 'slides'
+                ? 'border-amber-500 text-amber-600 dark:text-amber-300 font-bold'
+                : 'border-transparent text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            <span>Hero Slides 3D ({settings.heroSlides?.length ?? 4})</span>
+          </button>
+        )}
 
         <button
           onClick={() => setActiveTab('reviews')}
@@ -1688,26 +1697,28 @@ export const AdminDashboard: React.FC = () => {
                 />
               </div>
 
-              {/* 3D Hero Slide Carousel Quick Access */}
-              <div className="pt-3 border-t border-slate-200 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30">
-                <div className="space-y-0.5">
-                  <div className="font-bold text-slate-900 dark:text-white text-xs flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                    <span>3D Hero Slide Carousel ({settings.heroSlides?.length ?? 4} slides)</span>
+              {/* 3D Hero Slide Carousel Quick Access (only visible if enabled) */}
+              {settings.showHeroSlides && (
+                <div className="pt-3 border-t border-slate-200 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                  <div className="space-y-0.5">
+                    <div className="font-bold text-slate-900 dark:text-white text-xs flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                      <span>3D Hero Slide Carousel ({settings.heroSlides?.length ?? 4} slides)</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-neutral-400">
+                      ស្លាយចលនា 3D នៅខាងស្ដាំនៃ Hero Section ជាមួយនឹង Badge, រូបភាពម្ហូប និងចលនា Auto-Slide
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-600 dark:text-neutral-400">
-                    ស្លាយចលនា 3D នៅខាងស្ដាំនៃ Hero Section ជាមួយនឹង Badge, រូបភាពម្ហូប និងចលនា Auto-Slide
-                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('slides')}
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-xs transition-colors shrink-0 cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Customize Hero Slides →</span>
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('slides')}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-xs transition-colors shrink-0 cursor-pointer"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Customize Hero Slides →</span>
-                </button>
-              </div>
+              )}
             </div>
           </div>
 
