@@ -112,7 +112,9 @@ export const AuthGate: React.FC = () => {
       {/* Floating Theme Mode Toggle in Top Right */}
       <div className="absolute top-5 right-5 z-20">
         <button
+          type="button"
           onClick={toggleTheme}
+          suppressHydrationWarning
           aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
           className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/90 dark:bg-neutral-900/90 hover:bg-white dark:hover:bg-neutral-850 text-slate-700 dark:text-neutral-200 border border-slate-200 dark:border-neutral-750 shadow-md backdrop-blur-md text-xs font-medium transition-all active:scale-95 cursor-pointer"

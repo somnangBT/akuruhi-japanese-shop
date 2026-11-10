@@ -106,9 +106,9 @@ export const AdminHeroSlidesTab: React.FC = () => {
     setTitle('');
     setTitleKhmer('');
     setSubtitle('');
-    setBadge('ម្ហូបពិសេសចូលឆ្នាំថ្មី');
+    setBadge('ម្ហូបពិសេសប្រចាំហាង');
     setBadgeColor('amber');
-    setTag('🔍 ចម្អិនផ្ទាល់ភ្លាមៗ');
+    setTag('🥩 សាច់គោជប៉ុន ១០០%');
     setImageUrl(WAGYU_IMAGE);
     setPrice(35);
     setActionText('កុម្ម៉ង់ឥឡូវនេះ');
@@ -684,7 +684,7 @@ export const AdminHeroSlidesTab: React.FC = () => {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. ឡុកឡាក់សាច់គោ & អាម៉ុកត្រីបែបខ្មែរ"
+                      placeholder="e.g. សាច់គោជប៉ុន A5 Miyazaki Wagyu, ត្រីសាម៉ុងស្រស់"
                       value={titleKhmer}
                       onChange={(e) => setTitleKhmer(e.target.value)}
                       className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-500"
@@ -714,7 +714,7 @@ export const AdminHeroSlidesTab: React.FC = () => {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. ម្ហូបពិសេសចូលឆ្នាំថ្មី, A5 Wagyu Special"
+                      placeholder="e.g. ម្ហូបពិសេសប្រចាំហាង, A5 Wagyu Special"
                       value={badge}
                       onChange={(e) => setBadge(e.target.value)}
                       className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-500"

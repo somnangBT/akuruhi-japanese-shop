@@ -49,7 +49,7 @@ const BADGE_COLOR_MAP: Record<string, { bg: string; text: string; border: string
     bg: 'bg-gradient-to-r from-emerald-500 to-emerald-600',
     text: 'text-white font-bold',
     border: 'border-emerald-300/80',
-    glow: 'rgba(16, 185, 129, 0.3)',
+    glow: 'rgba(168, 85, 247, 0.3)',
   },
   sky: {
     bg: 'bg-gradient-to-r from-sky-500 to-sky-600',
@@ -175,31 +175,6 @@ export const Hero: React.FC = () => {
         </div>
       )}
 
-      {/* Traditional Khmer Hanging Lanterns (ឆ្វេង & ស្ដាំ ដូចរូបគំរូ) */}
-      <div className="hidden lg:flex absolute top-6 left-3 xl:left-6 z-20 flex-col items-center pointer-events-none select-none">
-        <div className="w-[1.5px] h-12 bg-gradient-to-b from-amber-400/80 to-amber-300/40" />
-        <div className="w-8 h-10 rounded-lg bg-gradient-to-b from-amber-500 via-rose-500 to-amber-600 border border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.5)] flex items-center justify-center text-sm">
-          🏮
-        </div>
-        <div className="flex flex-col items-center mt-1 space-y-1">
-          <div className="w-3.5 h-4 rounded-xs bg-amber-400 shadow-xs" />
-          <div className="w-3.5 h-4 rounded-xs bg-sky-500 shadow-xs" />
-          <div className="w-3.5 h-4 rounded-xs bg-rose-500 shadow-xs" />
-        </div>
-      </div>
-
-      <div className="hidden lg:flex absolute top-6 right-3 xl:right-6 z-20 flex-col items-center pointer-events-none select-none">
-        <div className="w-[1.5px] h-12 bg-gradient-to-b from-amber-400/80 to-amber-300/40" />
-        <div className="w-8 h-10 rounded-lg bg-gradient-to-b from-amber-500 via-rose-500 to-amber-600 border border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.5)] flex items-center justify-center text-sm">
-          🏮
-        </div>
-        <div className="flex flex-col items-center mt-1 space-y-1">
-          <div className="w-3.5 h-4 rounded-xs bg-rose-500 shadow-xs" />
-          <div className="w-3.5 h-4 rounded-xs bg-sky-500 shadow-xs" />
-          <div className="w-3.5 h-4 rounded-xs bg-amber-400 shadow-xs" />
-        </div>
-      </div>
-
       {/* Main Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-center">
@@ -207,20 +182,17 @@ export const Hero: React.FC = () => {
           {/* LEFT COLUMN: Headings, Khmer text, buttons, controls     */}
           {/* ========================================================= */}
           <div className="lg:col-span-5 xl:col-span-5 space-y-4 sm:space-y-5">
-            {/* Top Festive Khmer Ribbon / Announcement */}
+            {/* Top Announcement Badge */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-amber-500/10 dark:bg-amber-950/40 border border-amber-500/30 text-amber-800 dark:text-amber-300 text-xs font-semibold shadow-xs"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-rose-500/10 dark:bg-rose-950/40 border border-rose-500/30 text-rose-800 dark:text-rose-300 text-xs font-semibold shadow-xs"
             >
-              <span className="text-sm">🏮</span>
-              <span className="text-xs">🌸</span>
+              <Sparkles className="w-3.5 h-3.5 text-rose-500" />
               <span className="truncate">
-                {settings.heroBadgeText || 'អបអរសាទរពិធីបុណ្យចូលឆ្នាំថ្មីប្រពៃណីជាតិខ្មែរ • សួស្តីឆ្នាំថ្មី KH'}
+                {settings.heroBadgeText || 'Akuruhi Cambodia · ផ្គត់ផ្គង់ម្ហូបជប៉ុន & សាច់គោ Wagyu A5'}
               </span>
-              <span className="text-xs">🌸</span>
-              <span className="text-xs">✦</span>
             </motion.div>
 
             {/* Store Brand / Headline */}
@@ -231,20 +203,19 @@ export const Hero: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.05 }}
                 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-slate-900 dark:text-white tracking-tight flex items-baseline gap-2"
               >
-                <span>{settings.storeName.split(' ')[0] || 'Delicious'}</span>
-                <span className="text-amber-500 dark:text-amber-400 text-xl sm:text-2xl lg:text-3xl font-extrabold">
-                  {settings.storeName.split(' ').slice(1).join(' ') || 'Eats'}
+                <span>{settings.storeName.split(' ')[0] || 'Akuruhi'}</span>
+                <span className="text-rose-600 dark:text-rose-500 text-xl sm:text-2xl lg:text-3xl font-extrabold">
+                  {settings.storeName.split(' ').slice(1).join(' ') || 'Japanese Supply'}
                 </span>
               </motion.div>
 
-              {/* Headline in Glowing Cyan like Reference Screenshot */}
               <motion.h1
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="font-display text-2xl sm:text-3xl lg:text-4xl font-black text-cyan-500 dark:text-cyan-400 drop-shadow-[0_0_20px_rgba(6,182,212,0.35)] tracking-tight leading-[1.2] mt-1 text-balance"
+                className="font-display text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.2] mt-1 text-balance"
               >
-                {settings.heroTitle || 'ម្ហូបខ្មែរចូលឆ្នាំថ្មី នំប្រពៃណី & អាហារស្រស់ធម្មជាតិ'}
+                {settings.heroTitle || 'ម្ហូបជប៉ុនលំដាប់កំពូល & គ្រឿងផ្សំស្រស់ធម្មជាតិ'}
               </motion.h1>
             </div>
 
@@ -256,10 +227,10 @@ export const Hero: React.FC = () => {
               className="text-xs sm:text-sm text-slate-700 dark:text-neutral-300 leading-relaxed max-w-xl"
             >
               {settings.heroSubtitle ||
-                'អបអរសាទរពិធីបុណ្យចូលឆ្នាំថ្មីប្រពៃណីជាតិខ្មែរ! រីករាយជាមួយមុខម្ហូបប្រពៃណីឈ្ងុយឆ្ងាញ់ នំអន្សមជ្រូក-ចេក ការីសាច់មាន់ ខសាច់ជ្រូកពងទា និងគ្រឿងផ្សំស្រស់ធម្មជាតិ ១០០% សម្រាប់សែនទេវតា និងជួបជុំក្រុមគ្រួសារ ដឹកជញ្ជូនរហ័សទាន់ចិត្តដល់គេហដ្ឋាន!'}
+                'រីករាយជាមួយមុខម្ហូបជប៉ុនរសជាតិដើម សាច់គោ Wagyu A5 ត្រីសាម៉ុងស្រស់ Toyosu Sashimi និងគ្រឿងទេសជប៉ុន ១០០% សម្រាប់គ្រួសារ និងភោជនីយដ្ឋាន ដឹកជញ្ជូនរហ័សទាន់ចិត្តដល់គេហដ្ឋាន!'}
             </motion.p>
 
-            {/* Traditional Gold Ornamental Divider (ដូចរូបគំរូ ✦ ❖ ✦) */}
+            {/* Traditional Gold Ornamental Divider */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -275,29 +246,29 @@ export const Hero: React.FC = () => {
               <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-amber-400/50 to-amber-500/80" />
             </motion.div>
 
-            {/* Action Buttons: Themed Fresh Food & Cooked buttons like in reference */}
+            {/* Action Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.25 }}
               className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-1"
             >
-              {/* Button 1: Fresh Food (Green Themed) */}
+              {/* Button 1: Catalog */}
+              <button
+                onClick={scrollToCatalog}
+                className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-xs sm:text-sm shadow-lg shadow-rose-950/20 active:scale-95 transition-all cursor-pointer"
+              >
+                <UtensilsCrossed className="w-4 h-4 text-rose-100" />
+                <span>ទស្សនាផលិតផល (View Catalog)</span>
+              </button>
+
+              {/* Button 2: Fresh Food */}
               <button
                 onClick={scrollToCatalog}
                 className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-emerald-950/20 active:scale-95 transition-all cursor-pointer"
               >
                 <Salad className="w-4 h-4 text-emerald-100" />
                 <span>អាហារស្រស់ៗ (Fresh Food)</span>
-              </button>
-
-              {/* Button 2: Cooked / Wagyu Fresh (Amber Themed) */}
-              <button
-                onClick={scrollToCatalog}
-                className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-950/20 active:scale-95 transition-all cursor-pointer"
-              >
-                <Flame className="w-4 h-4 text-slate-950" />
-                <span>អាហារចំអិនផ្ទាល់ (Cooked Fresh)</span>
               </button>
 
               {/* Quotation PDF */}
@@ -370,7 +341,7 @@ export const Hero: React.FC = () => {
 
             {/* Bottom Row on Left: Pause/Play indicator + Mode Toggle */}
             <div className="pt-2 flex flex-wrap items-center gap-2.5">
-              {/* Pause / Play Button (ដូចរូបគំរូ [⏸️ ផ្អាក: បិទ]) */}
+              {/* Pause / Play Button */}
               {showHeroSlides && activeSlides.length > 1 && (
                 <button
                   type="button"
@@ -415,7 +386,7 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* ========================================================= */}
-          {/* RIGHT COLUMN: Expansive 3D Hero Slide Showcase (ដូចរូបគំរូ) */}
+          {/* RIGHT COLUMN: Expansive 3D Hero Slide Showcase           */}
           {/* ========================================================= */}
           {showHeroSlides && (
             <div
@@ -428,23 +399,8 @@ export const Hero: React.FC = () => {
               {/* Decorative Ambient Background Halo */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 sm:w-[520px] h-80 sm:h-[520px] bg-gradient-to-tr from-amber-500/20 via-rose-500/15 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-              {/* Floating Decorative Badges (ដូចរូបគំរូ) */}
-              {/* 1. Floating Festival Lantern (🏮) Badge on Top-Left */}
-              <motion.div
-                animate={{
-                  y: [0, -6, 0],
-                }}
-                transition={{
-                  duration: 3.5,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-                className="absolute -top-3 left-3 sm:left-8 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-900/85 dark:bg-[#111420]/90 border border-slate-700/80 backdrop-blur-md flex items-center justify-center text-lg sm:text-xl shadow-xl pointer-events-none"
-              >
-                🏮
-              </motion.div>
-
-              {/* 2. Floating Cherry Blossom (🌸) Badge on Bottom-Left */}
+              {/* Floating Decorative Badges */}
+              {/* 1. Floating Cherry Blossom (🌸) Badge on Bottom-Left */}
               <motion.div
                 animate={{
                   y: [0, -8, 0],
@@ -460,7 +416,7 @@ export const Hero: React.FC = () => {
                 🌸
               </motion.div>
 
-              {/* 3. Floating Golden Sparkle (✨) Badge on Right */}
+              {/* 2. Floating Golden Sparkle (✨) Badge on Right */}
               <motion.div
                 animate={{
                   y: [0, 8, 0],
@@ -476,7 +432,7 @@ export const Hero: React.FC = () => {
                 ✨
               </motion.div>
 
-              {/* Layout Mode A: 3D Coverflow Perspective (កាត ៣ ដូចរូបគំរូ screenshot) */}
+              {/* Layout Mode A: 3D Coverflow Perspective */}
               {layoutMode === '3d_cards' ? (
                 <div className="relative w-full max-w-[620px] min-h-[360px] sm:min-h-[420px] flex items-center justify-center select-none py-2 px-2 overflow-visible">
                   {/* Left Card (Behind, tilted left) */}
@@ -533,7 +489,7 @@ export const Hero: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Center Active Card: Glowing Cyan Border + Gold Corners ╔ ╝ (ដូចរូបគំរូ) */}
+                  {/* Center Active Card */}
                   <AnimatePresence mode="popLayout" custom={direction} initial={false}>
                     <motion.div
                       key={currentSlide.id}
@@ -572,7 +528,7 @@ export const Hero: React.FC = () => {
                       onClick={scrollToCatalog}
                       className="relative z-20 w-[84%] sm:w-[80%] lg:w-[76%] rounded-2xl sm:rounded-3xl p-4 sm:p-5 bg-slate-900/95 dark:bg-[#111420]/95 backdrop-blur-2xl border border-amber-400/80 shadow-[0_30px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30 cursor-pointer will-change-transform"
                     >
-                      {/* Active Card: Traditional Gold Corner Brackets ╔ ╝ (ដូចរូបគំរូ) */}
+                      {/* Active Card: Traditional Gold Corner Brackets ╔ ╝ */}
                       <div className="absolute top-2.5 left-2.5 w-5 h-5 border-t-2 border-l-2 border-amber-400 rounded-tl-xs pointer-events-none z-20" />
                       <div className="absolute bottom-2.5 right-2.5 w-5 h-5 border-b-2 border-r-2 border-amber-400 rounded-br-xs pointer-events-none z-20" />
 
@@ -594,8 +550,8 @@ export const Hero: React.FC = () => {
                         </span>
                       </div>
 
-                      {/* Food Image with Neon Cyan Glowing Border (ដូចរូបគំរូ) */}
-                      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black/80 border-2 border-cyan-400/80 shadow-[0_0_22px_rgba(6,182,212,0.5)] ring-1 ring-cyan-300/40 group">
+                      {/* Food Image */}
+                      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black/80 border border-slate-700/80 shadow-2xl group">
                         <img
                           src={currentSlide.imageUrl}
                           alt={currentSlide.title}
@@ -620,7 +576,7 @@ export const Hero: React.FC = () => {
 
                         <div className="flex items-center justify-between text-xs sm:text-sm pt-0.5">
                           <span className="text-xs sm:text-sm text-slate-300 truncate max-w-[260px]">
-                            {currentSlide.title || currentSlide.subtitle || 'រសជាតិប្រពៃណីឈ្ងុយឆ្ងាញ់'}
+                            {currentSlide.title || currentSlide.subtitle || 'Akuruhi Supreme Quality'}
                           </span>
 
                           {currentSlide.tag && (
@@ -697,8 +653,8 @@ export const Hero: React.FC = () => {
                         </span>
                       </div>
 
-                      {/* 1080 HD Widescreen Food Image Container with Cyan Border */}
-                      <div className="relative aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black/80 border-2 border-cyan-400/80 shadow-[0_0_25px_rgba(6,182,212,0.45)] ring-1 ring-cyan-300/40 group">
+                      {/* 1080 HD Widescreen Food Image Container */}
+                      <div className="relative aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black/80 border border-slate-700/80 shadow-2xl group">
                         <img
                           src={currentSlide.imageUrl}
                           alt={currentSlide.title}
@@ -739,24 +695,24 @@ export const Hero: React.FC = () => {
                 </div>
               )}
 
-              {/* Trust Metric Badges underneath Right Slide Showcase (ដូចរូបគំរូ: ១០០% | ១៥-២៥ នាទី | ៤.៩★) */}
+              {/* Trust Metric Badges underneath Right Slide Showcase */}
               <div className="w-full max-w-[480px] sm:max-w-[540px] mt-4 py-3 sm:py-3.5 px-6 rounded-2xl bg-slate-900/95 dark:bg-[#0c0e17]/95 border border-slate-800 shadow-2xl flex items-center justify-around text-center backdrop-blur-md">
                 <div>
-                  <div className="text-cyan-400 font-black text-xl sm:text-2xl font-mono tracking-tight drop-shadow-[0_0_8px_rgba(6,182,212,0.4)]">
+                  <div className="text-amber-400 dark:text-amber-300 font-black text-xl sm:text-2xl font-mono tracking-tight">
                     ១០០%
                   </div>
-                  <div className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">គុណភាពខ្ពស់</div>
+                  <div className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">គុណភាពជប៉ុន</div>
                 </div>
                 <div className="w-px h-8 bg-slate-700/60" />
                 <div>
-                  <div className="text-cyan-400 font-black text-xl sm:text-2xl font-mono tracking-tight drop-shadow-[0_0_8px_rgba(6,182,212,0.4)]">
-                    ១៥-២៥ នាទី
+                  <div className="text-amber-400 dark:text-amber-300 font-black text-xl sm:text-2xl font-mono tracking-tight">
+                    ១៥-៤៥ នាទី
                   </div>
                   <div className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">ដឹកជញ្ជូនរហ័ស</div>
                 </div>
                 <div className="w-px h-8 bg-slate-700/60" />
                 <div>
-                  <div className="text-cyan-400 font-black text-xl sm:text-2xl font-mono tracking-tight drop-shadow-[0_0_8px_rgba(6,182,212,0.4)]">
+                  <div className="text-amber-400 dark:text-amber-300 font-black text-xl sm:text-2xl font-mono tracking-tight">
                     ៤.៩ ★
                   </div>
                   <div className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">ការពេញចិត្ត</div>

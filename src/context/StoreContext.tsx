@@ -317,13 +317,28 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const saved = localStorage.getItem('akuruhi_settings');
       if (saved) {
         const parsed = JSON.parse(saved);
+        // Cleanse any outdated New Year / Festive designs
+        const hasNewYearSlides = parsed.heroSlides?.some(
+          (s: any) => s.badge?.includes('ចូលឆ្នាំ') || s.titleKhmer?.includes('ឡុកឡាក់')
+        );
+        const cleanedSlides =
+          hasNewYearSlides || !parsed.heroSlides || parsed.heroSlides.length === 0
+            ? DEFAULT_STORE_SETTINGS.heroSlides
+            : parsed.heroSlides;
+
+        const isNewYearTitle = parsed.heroTitle?.includes('ចូលឆ្នាំ') || parsed.heroTitle?.includes('Delicious');
+        const isNewYearSubtitle = parsed.heroSubtitle?.includes('ចូលឆ្នាំ') || parsed.heroSubtitle?.includes('អន្សម');
+        const isNewYearBadge = parsed.heroBadgeText?.includes('ចូលឆ្នាំ');
+        const isDeliciousStoreName = parsed.storeName?.includes('Delicious');
+
         return {
           ...DEFAULT_STORE_SETTINGS,
           ...parsed,
-          heroSlides:
-            parsed.heroSlides && parsed.heroSlides.length > 0
-              ? parsed.heroSlides
-              : DEFAULT_STORE_SETTINGS.heroSlides,
+          storeName: isDeliciousStoreName ? DEFAULT_STORE_SETTINGS.storeName : parsed.storeName,
+          heroTitle: isNewYearTitle ? DEFAULT_STORE_SETTINGS.heroTitle : parsed.heroTitle,
+          heroSubtitle: isNewYearSubtitle ? DEFAULT_STORE_SETTINGS.heroSubtitle : parsed.heroSubtitle,
+          heroBadgeText: isNewYearBadge ? DEFAULT_STORE_SETTINGS.heroBadgeText : parsed.heroBadgeText,
+          heroSlides: cleanedSlides,
         };
       }
       return DEFAULT_STORE_SETTINGS;
